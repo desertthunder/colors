@@ -40,6 +40,4 @@ export function writeHashRoute(route: AppRoute): void {
   }
 }
 
-function isAppPage(value: string): value is AppPage {
-  return appPages.includes(value as AppPage)
-}
+const isAppPage = (value: string): value is AppPage => appPages.includes(value as AppPage)

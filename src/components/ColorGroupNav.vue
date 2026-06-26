@@ -1,17 +1,41 @@
 <script setup lang="ts">
+import { nextTick, ref, watch } from 'vue'
 import type { Palette } from '../lib/colors'
 import { slugify } from '../lib/slug'
 
-defineProps<{ palette: Palette; activeGroupId: string }>()
+const props = defineProps<{ palette: Palette; activeGroupId: string }>()
 const emit = defineEmits<{ selectGroup: [id: string] }>()
+const navRef = ref<HTMLElement>()
 
 function groupId(palette: Palette, groupName: string): string {
   return `${palette.id}-${slugify(groupName)}`
 }
+
+watch(
+  () => props.activeGroupId,
+  (id) => {
+    if (!id) return
+    void nextTick(() => {
+      const nav = navRef.value
+      const active = nav?.querySelector<HTMLElement>("button[aria-current='true']")
+      if (!nav || !active) return
+
+      const navEdge = nav.getBoundingClientRect()
+      const buttonEdge = active.getBoundingClientRect()
+      const overflow = buttonEdge.left - navEdge.left
+
+      if (overflow < 0) {
+        nav.scrollLeft += overflow - 8
+      } else if (overflow + active.offsetWidth > nav.clientWidth) {
+        nav.scrollLeft += overflow + active.offsetWidth - nav.clientWidth + 8
+      }
+    })
+  },
+)
 </script>
 
 <template>
-  <nav class="color-group-nav" aria-label="Color groups">
+  <nav ref="navRef" class="color-group-nav" aria-label="Color groups">
     <button
       v-for="group in palette.groups"
       :key="group.name"

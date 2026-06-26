@@ -16,6 +16,4 @@ export const paletteById = Object.fromEntries(palettes.map((palette) => [palette
 >
 
 /** Returns a palette by id. */
-export function getPalette(id: PaletteId): Palette {
-  return paletteById[id]
-}
+export const getPalette = (id: PaletteId): Palette => paletteById[id]

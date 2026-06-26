@@ -10,13 +10,13 @@ import PaletteTabs from '../components/PaletteTabs.vue'
 import { slugify } from '../lib/slug'
 
 const props = defineProps<{ palette: Palette; route: AppRoute }>()
-
 const copyMode = ref<CopyMode>('value')
 const activeGroupId = ref('')
 const openGroupIds = ref(new Set<string>())
+
 let scrollFrame = 0
 
-const copyOptions = [
+const copyOpts = [
   { label: 'Raw value', value: 'value' },
   { label: 'CSS variable', value: 'css' },
   { label: 'Object entry', value: 'object' },
@@ -24,17 +24,13 @@ const copyOptions = [
 
 const groupIds = computed(() => props.palette.groups.map((group) => groupId(group.name)))
 
-function groupId(groupName: string): string {
-  return `${props.palette.id}-${slugify(groupName)}`
-}
+const groupId = (groupName: string): string => `${props.palette.id}-${slugify(groupName)}`
 
 function resetOpenGroups(): void {
   openGroupIds.value = new Set(groupIds.value)
 }
 
-function isGroupOpen(id: string): boolean {
-  return openGroupIds.value.has(id)
-}
+const isGroupOpen = (id: string): boolean => openGroupIds.value.has(id)
 
 function toggleGroup(id: string): void {
   const next = new Set(openGroupIds.value)
@@ -125,7 +121,7 @@ watch(
         <fieldset class="copy-control">
           <label for="copy-mode">Copy as</label>
           <select id="copy-mode" v-model="copyMode">
-            <option v-for="option in copyOptions" :key="option.value" :value="option.value">
+            <option v-for="option in copyOpts" :key="option.value" :value="option.value">
               {{ option.label }}
             </option>
           </select>
