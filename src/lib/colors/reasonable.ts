@@ -1,6 +1,6 @@
 import type { Palette } from './types'
 
-const sourceUrl = 'https://raw.githubusercontent.com/matthewhowell/reasonable-colors/master/reasonable-colors.css'
+const sourceUrl = 'https://github.com/matthewhowell/reasonable-colors'
 
 /** Reasonable Colors normalized from the canonical hex CSS variables. */
 export const reasonablePalette = {

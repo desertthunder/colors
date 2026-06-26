@@ -14,7 +14,7 @@ const appVersion = __APP_VERSION__
     </div>
 
     <nav class="footer-links" aria-label="Developer links">
-      <a href="https://github.com/desertthunder" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/desertthunder/colors" target="_blank" rel="noreferrer">GitHub</a>
       <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Website</a>
     </nav>
   </footer>
