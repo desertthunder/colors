@@ -2,6 +2,7 @@ import type { Palette } from './types'
 
 const sourceUrl = 'https://code.webb.page/nevercease/uchu.git/plain/src/colors.ts'
 
+/** uchu primary and pastel colors normalized for the app. */
 export const uchuPalette = {
   id: 'uchu',
   name: 'uchu',

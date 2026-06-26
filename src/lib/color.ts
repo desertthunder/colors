@@ -2,16 +2,20 @@ import { converter, formatHex, formatHsl, formatRgb, parse } from 'culori'
 import type { CuloriColor } from 'culori'
 import type { ColorValue } from './colors'
 
+/** User-selectable color output formats. */
 export type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'oklch'
 
+/** Ordered color formats for controls and route validation. */
 export const colorFormats = ['hex', 'rgb', 'hsl', 'oklch'] satisfies ColorFormat[]
 
 const toOklch = converter('oklch')
 
+/** Returns whether a string is a supported color output format. */
 export function isColorFormat(value: string | null): value is ColorFormat {
   return colorFormats.includes(value as ColorFormat)
 }
 
+/** Formats a canonical palette value for display and copying. */
 export function formatColorValue(color: ColorValue, format: ColorFormat): string {
   if (color.space === 'keyword') return color.value
 

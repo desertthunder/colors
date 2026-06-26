@@ -1,6 +1,20 @@
 <template>
   <footer class="app-footer">
-    <p>Sources: Tailwind v3, uchu, and Reasonable Colors.</p>
+    <div class="footer-primary">
+      <p>
+        Built by
+        <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Owais Jamil</a>, a software engineer in
+        Austin, TX.
+      </p>
+      <p>Sources: Tailwind v3, uchu, and Reasonable Colors.</p>
+      <p>License: MIT</p>
+    </div>
+
+    <nav class="footer-links" aria-label="Developer links">
+      <a href="https://github.com/desertthunder" target="_blank" rel="noreferrer">GitHub</a>
+
+      <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Website</a>
+    </nav>
   </footer>
 </template>
 
@@ -15,6 +29,29 @@
   color: var(--color-text-muted);
   font-size: var(--size-sm);
   line-height: var(--line-sm);
+}
+
+.footer-primary {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.app-footer a {
+  color: var(--color-text-strong);
+  font-weight: 700;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+.app-footer a:hover,
+.app-footer a:focus-visible {
+  color: var(--color-accent-strong);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 @media (max-width: 48rem) {

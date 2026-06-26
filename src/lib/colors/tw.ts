@@ -2,6 +2,7 @@ import type { Palette } from './types'
 
 const sourceUrl = 'https://unpkg.com/tailwindcss@3.4.17/lib/public/colors.js'
 
+/** Tailwind CSS v3.4.17 colors normalized for the app. */
 export const tailwindPalette = {
   id: 'tailwind',
   name: 'Tailwind CSS v3',

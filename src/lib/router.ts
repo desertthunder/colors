@@ -2,14 +2,18 @@ import type { PaletteId } from './colors'
 import type { ColorFormat } from './color'
 import { isColorFormat } from './color'
 
+/** Hash-routed pages supported by the app. */
 export type AppPage = PaletteId | 'about'
 
+/** Parsed route state derived from the URL hash. */
 export type AppRoute = { page: AppPage; format: ColorFormat }
 
+/** Route used when the current hash is empty or invalid. */
 export const defaultRoute = { page: 'tailwind', format: 'hex' } satisfies AppRoute
 
 const appPages = ['tailwind', 'uchu', 'reasonable', 'about'] satisfies AppPage[]
 
+/** Parses a URL hash into validated app route state. */
 export function parseHashRoute(hash: string): AppRoute {
   const value = hash.replace(/^#/, '')
   const [path = '', query = ''] = value.split('?')
@@ -23,10 +27,12 @@ export function parseHashRoute(hash: string): AppRoute {
   }
 }
 
+/** Formats app route state as a URL hash. */
 export function formatHashRoute(route: AppRoute): string {
   return `#/${route.page}?format=${route.format}`
 }
 
+/** Writes route state to `window.location.hash` when it has changed. */
 export function writeHashRoute(route: AppRoute): void {
   const nextHash = formatHashRoute(route)
   if (window.location.hash !== nextHash) {

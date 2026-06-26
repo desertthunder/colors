@@ -1,10 +1,20 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import AppFooter from './AppFooter.vue'
 import AppHeader from './AppHeader.vue'
+import FormatControl from './FormatControl.vue'
 import IntroSection from './IntroSection.vue'
+import PaletteTabs from './PaletteTabs.vue'
+import PaletteView from './PaletteView.vue'
+import { getPalette } from '../lib/colors'
 import type { AppRoute } from '../lib/router'
 
-defineProps<{ route: AppRoute }>()
+const props = defineProps<{ route: AppRoute }>()
+
+const activePalette = computed(() => {
+  if (props.route.page === 'about') return null
+  return getPalette(props.route.page)
+})
 </script>
 
 <template>
@@ -13,6 +23,14 @@ defineProps<{ route: AppRoute }>()
 
     <main class="app-main">
       <IntroSection :route="route" />
+      <div v-if="activePalette" class="palette-workspace">
+        <div class="palette-controls">
+          <PaletteTabs :route="route" />
+          <FormatControl :route="route" />
+        </div>
+
+        <PaletteView :palette="activePalette" :format="route.format" />
+      </div>
     </main>
 
     <AppFooter />
@@ -32,12 +50,29 @@ defineProps<{ route: AppRoute }>()
 .app-main {
   display: grid;
   align-content: start;
+  gap: var(--space-7);
   padding-block: var(--space-8);
+}
+
+.palette-workspace {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.palette-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-5);
 }
 
 @media (max-width: 48rem) {
   .app-shell {
     padding-inline: var(--space-4);
+  }
+
+  .palette-controls {
+    grid-template-columns: 1fr;
   }
 }
 </style>
