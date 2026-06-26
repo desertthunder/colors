@@ -2,14 +2,17 @@
 import AppFooter from './AppFooter.vue'
 import AppHeader from './AppHeader.vue'
 import IntroSection from './IntroSection.vue'
+import type { AppRoute } from '../lib/router'
+
+defineProps<{ route: AppRoute }>()
 </script>
 
 <template>
   <div class="app-shell">
-    <AppHeader />
+    <AppHeader :route="route" />
 
     <main class="app-main">
-      <IntroSection />
+      <IntroSection :route="route" />
     </main>
 
     <AppFooter />

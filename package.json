@@ -13,6 +13,7 @@
     "@fontsource-variable/azeret-mono": "^5.2.11",
     "@fontsource-variable/hanken-grotesk": "^5.2.8",
     "@fontsource-variable/ibm-plex-sans": "^5.2.8",
+    "culori": "^4.0.2",
     "vue": "^3.5.38"
   },
   "devDependencies": {

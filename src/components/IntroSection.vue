@@ -1,8 +1,29 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { getPalette } from '../lib/colors'
+import type { AppRoute } from '../lib/router'
+
+const props = defineProps<{ route: AppRoute }>()
+
+const pageTitle = computed(() => {
+  if (props.route.page === 'about') return 'About this color reference.'
+  return `${getPalette(props.route.page).name} colors.`
+})
+
+const pageDescription = computed(() => {
+  if (props.route.page === 'about') {
+    return 'A copy-friendly browser for Tailwind v3, uchu, and Reasonable Colors.'
+  }
+
+  return `Showing ${getPalette(props.route.page).groups.length} groups with ${props.route.format} output selected.`
+})
+</script>
+
 <template>
   <section class="intro" aria-labelledby="page-title">
     <p class="eyebrow">Palette reference</p>
-    <h1 id="page-title">Copy-ready color systems in one place.</h1>
-    <p>Browse Tailwind v3, uchu, and Reasonable Colors with matching route, format, and copy controls.</p>
+    <h1 id="page-title">{{ pageTitle }}</h1>
+    <p>{{ pageDescription }}</p>
   </section>
 </template>
 

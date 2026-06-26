@@ -1,13 +1,23 @@
+<script setup lang="ts">
+import { formatHashRoute, type AppRoute } from '../lib/router'
+
+const props = defineProps<{ route: AppRoute }>()
+
+function href(page: AppRoute['page']): string {
+  return formatHashRoute({ page, format: props.route.format })
+}
+</script>
+
 <template>
   <header class="app-header">
-    <a class="brand" href="#/tailwind?format=hex" aria-label="Colors home">
+    <a class="brand" :href="href('tailwind')" aria-label="Colors home">
       <span class="brand-mark" aria-hidden="true"></span>
       <span>Colors</span>
     </a>
 
     <nav class="app-nav" aria-label="Main navigation">
-      <a href="#/tailwind?format=hex">Palettes</a>
-      <a href="#/about">About</a>
+      <a :href="href('tailwind')" :aria-current="route.page !== 'about' ? 'page' : undefined">Palettes</a>
+      <a :href="href('about')" :aria-current="route.page === 'about' ? 'page' : undefined">About</a>
     </nav>
   </header>
 </template>
@@ -61,7 +71,8 @@
 }
 
 .app-nav a:hover,
-.app-nav a:focus-visible {
+.app-nav a:focus-visible,
+.app-nav a[aria-current='page'] {
   color: var(--color-accent-strong);
   background: var(--color-accent-soft);
 }

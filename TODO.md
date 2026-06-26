@@ -155,10 +155,10 @@ Fallback behavior can be added later if clipboard support becomes a real issue.
 - [x] Split `src/App.vue` into small shell components.
 - [x] Review upstream palette source formats.
 - [x] Add complete palette data for Tailwind v3, uchu, and Reasonable.
-- [ ] Add an index module for `src/lib/colors` as `src/lib/colors.ts` when a caller needs a single import point.
-- [ ] Install a color conversion library when implementing format helpers (`culori`)
-- [ ] Add `hex`, `rgb`, `hsl`, and `oklch` formatting helpers.
-- [ ] Build the native hash router for the four routes.
+- [x] Add an index module for `src/lib/colors` as `src/lib/colors.ts` when a caller needs a single import point.
+- [x] Install a color conversion library when implementing format helpers (`culori`)
+- [x] Add `hex`, `rgb`, `hsl`, and `oklch` formatting helpers.
+- [x] Build the native hash router for the four routes.
 - [ ] Persist the selected format in the hash route.
 - [ ] Build palette tabs and route-aware navigation state.
 - [ ] Build the shared palette rendering components.
