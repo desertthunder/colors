@@ -35,8 +35,11 @@ const blocks = computed(() => parseMarkdownCopy(aboutCopy))
 .about-view {
   display: grid;
   gap: var(--space-4);
+  inline-size: min(100%, 88ch);
   margin: auto;
-  width: 88ch;
+  overflow-wrap: normal;
+  text-wrap: pretty;
+  word-break: normal;
 }
 
 .heading-1 {
@@ -83,5 +86,6 @@ const blocks = computed(() => parseMarkdownCopy(aboutCopy))
   background: var(--color-surface);
   font-family: var(--font-code);
   font-size: 0.9em;
+  white-space: normal;
 }
 </style>

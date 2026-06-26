@@ -1,6 +1,6 @@
 import { converter, formatHex, formatHsl, formatRgb, parse } from 'culori'
 import type { CuloriColor } from 'culori'
-import type { ColorValue } from './colors'
+import type { ColorSwatch, ColorValue } from './colors'
 
 /** User-selectable color output formats. */
 export type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'oklch'
@@ -27,6 +27,25 @@ export function formatColorValue(color: ColorValue, format: ColorFormat): string
   if (format === 'hsl') return formatHsl(parsed) ?? color.value
 
   return formatOklch(parsed) ?? color.value
+}
+
+/** Returns the swatch value with the highest OKLCH lightness in a group. */
+export function getLightestSwatchValue(swatches: ColorSwatch[]): string | undefined {
+  let lightest: { lightness: number; value: string } | undefined
+
+  for (const swatch of swatches) {
+    if (swatch.value.space === 'keyword') continue
+
+    const parsed = parse(swatch.value.value)
+    const oklch = parsed ? toOklch(parsed) : undefined
+    if (!oklch || typeof oklch.l !== 'number') continue
+
+    if (!lightest || oklch.l > lightest.lightness) {
+      lightest = { lightness: oklch.l, value: swatch.value.value }
+    }
+  }
+
+  return lightest?.value
 }
 
 function formatOklch(color: CuloriColor): string | undefined {

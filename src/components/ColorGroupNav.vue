@@ -3,13 +3,10 @@ import type { Palette } from '../lib/colors'
 import { slugify } from '../lib/slug'
 
 defineProps<{ palette: Palette; activeGroupId: string }>()
+const emit = defineEmits<{ selectGroup: [id: string] }>()
 
 function groupId(palette: Palette, groupName: string): string {
   return `${palette.id}-${slugify(groupName)}`
-}
-
-function scrollToGroup(id: string): void {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
 
@@ -20,7 +17,7 @@ function scrollToGroup(id: string): void {
       :key="group.name"
       type="button"
       :aria-current="activeGroupId === groupId(palette, group.name) ? 'true' : undefined"
-      @click="scrollToGroup(groupId(palette, group.name))">
+      @click="emit('selectGroup', groupId(palette, group.name))">
       {{ group.name }}
     </button>
   </nav>

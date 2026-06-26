@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { formatColorValue } from '../color'
-import type { ColorValue } from '../colors'
+import { formatColorValue, getLightestSwatchValue } from '../color'
+import type { ColorSwatch, ColorValue } from '../colors'
 
 describe('formatColorValue', () => {
   const blue = { space: 'hex', value: '#3b82f6' } satisfies ColorValue
@@ -21,5 +21,15 @@ describe('formatColorValue', () => {
 
   it('preserves oklch output for oklch colors', () => {
     expect(formatColorValue(uchu, 'oklch')).toBe('oklch(0.5487 0.222 260.33)')
+  })
+
+  it('finds the lightest parseable swatch value', () => {
+    const swatches = [
+      { name: 'current', token: '--current', value: { space: 'keyword', value: 'currentColor' } },
+      { name: 'black', token: '--black', value: { space: 'hex', value: '#000' } },
+      { name: 'white', token: '--white', value: { space: 'hex', value: '#fff' } },
+    ] satisfies ColorSwatch[]
+
+    expect(getLightestSwatchValue(swatches)).toBe('#fff')
   })
 })

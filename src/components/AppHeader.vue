@@ -11,7 +11,7 @@ function href(page: AppRoute['page']): string {
 <template>
   <header class="app-header">
     <a class="brand" :href="href('tailwind')" aria-label="Colors home">
-      <span class="brand-mark" aria-hidden="true"></span>
+      <img class="brand-mark" src="/favicon.svg" alt="" aria-hidden="true" />
       <span>Colors</span>
     </a>
 
@@ -51,9 +51,6 @@ function href(page: AppRoute['page']): string {
 .brand-mark {
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  border: 1px solid var(--color-accent-strong);
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, transparent 50%, var(--color-accent-soft) 0), var(--color-accent);
 }
 
 .app-nav {

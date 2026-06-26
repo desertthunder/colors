@@ -13,7 +13,8 @@ const props = defineProps<{ palette: Palette; route: AppRoute }>()
 
 const copyMode = ref<CopyMode>('value')
 const activeGroupId = ref('')
-let observer: IntersectionObserver | null = null
+const openGroupIds = ref(new Set<string>())
+let scrollFrame = 0
 
 const copyOptions = [
   { label: 'Raw value', value: 'value' },
@@ -27,40 +28,77 @@ function groupId(groupName: string): string {
   return `${props.palette.id}-${slugify(groupName)}`
 }
 
-function observeColorGroups(): void {
-  observer?.disconnect()
-  activeGroupId.value = groupIds.value[0] ?? ''
+function resetOpenGroups(): void {
+  openGroupIds.value = new Set(groupIds.value)
+}
 
-  observer = new IntersectionObserver(updateActiveGroup, { rootMargin: '-22% 0px -68% 0px', threshold: 0 })
+function isGroupOpen(id: string): boolean {
+  return openGroupIds.value.has(id)
+}
+
+function toggleGroup(id: string): void {
+  const next = new Set(openGroupIds.value)
+  if (next.has(id)) {
+    next.delete(id)
+  } else {
+    next.add(id)
+  }
+  openGroupIds.value = next
+
+  void nextTick(updateActiveGroup)
+}
+
+function selectGroup(id: string): void {
+  if (!openGroupIds.value.has(id)) {
+    openGroupIds.value = new Set([...openGroupIds.value, id])
+  }
+
+  void nextTick(() => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    updateActiveGroup()
+  })
+}
+
+function queueActiveGroupUpdate(): void {
+  if (scrollFrame) return
+
+  scrollFrame = window.requestAnimationFrame(() => {
+    scrollFrame = 0
+    updateActiveGroup()
+  })
+}
+
+function updateActiveGroup(): void {
+  const marker = Math.min(window.innerHeight * 0.28, 220)
+  let activeId = groupIds.value[0] ?? ''
 
   for (const id of groupIds.value) {
     const section = document.getElementById(id)
-    if (section) observer.observe(section)
+    if (!section) continue
+    if (section.getBoundingClientRect().top <= marker) activeId = id
   }
-}
 
-function updateActiveGroup(entries: IntersectionObserverEntry[]): void {
-  const visible = entries
-    .filter((entry) => entry.isIntersecting)
-    .sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top)
-
-  if (visible[0]?.target.id) {
-    activeGroupId.value = visible[0].target.id
-  }
+  activeGroupId.value = activeId
 }
 
 onMounted(() => {
-  void nextTick(observeColorGroups)
+  resetOpenGroups()
+  void nextTick(updateActiveGroup)
+  window.addEventListener('scroll', queueActiveGroupUpdate, { passive: true })
+  window.addEventListener('resize', queueActiveGroupUpdate)
 })
 
 onBeforeUnmount(() => {
-  observer?.disconnect()
+  window.removeEventListener('scroll', queueActiveGroupUpdate)
+  window.removeEventListener('resize', queueActiveGroupUpdate)
+  if (scrollFrame) window.cancelAnimationFrame(scrollFrame)
 })
 
 watch(
   () => props.palette.id,
   () => {
-    void nextTick(observeColorGroups)
+    resetOpenGroups()
+    void nextTick(updateActiveGroup)
   },
 )
 </script>
@@ -86,7 +124,7 @@ watch(
       </div>
     </div>
 
-    <ColorGroupNav :palette="palette" :active-group-id="activeGroupId" />
+    <ColorGroupNav :palette="palette" :active-group-id="activeGroupId" @select-group="selectGroup" />
 
     <div class="palette-groups">
       <ColorGroup
@@ -95,7 +133,10 @@ watch(
         :palette-id="palette.id"
         :group="group"
         :format="route.format"
-        :copy-mode="copyMode" />
+        :copy-mode="copyMode"
+        :is-active="activeGroupId === groupId(group.name)"
+        :is-open="isGroupOpen(groupId(group.name))"
+        @toggle="toggleGroup(groupId(group.name))" />
     </div>
   </section>
 </template>
@@ -125,13 +166,14 @@ watch(
 
 .toolbar-controls {
   display: flex;
-  align-items: end;
+  align-items: stretch;
   justify-content: end;
   gap: var(--space-4);
 }
 
 .copy-control {
   display: grid;
+  align-content: end;
   gap: var(--space-2);
   margin: 0;
   padding: 0;
@@ -146,6 +188,7 @@ watch(
 }
 
 .copy-control select {
+  block-size: 2.75rem;
   inline-size: 10rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);

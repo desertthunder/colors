@@ -32,3 +32,18 @@ Every palette keeps its source naming style.
 
 Format controls change the displayed value, while copy modes produce raw values,
 CSS custom properties, or JavaScript object entries per selected palette.
+
+## Using the source palettes
+
+This project is a reference browser, not a replacement for the upstream packages.
+
+For Tailwind CSS v3, install `tailwindcss@3` and use the default utilities or import
+the color object from `tailwindcss/colors`.
+
+For uchu, install `@inc/uchu`. The source package exports JavaScript palettes such as
+`palette` and `pastelPalette`, a `color()` helper, and CSS entry points like `@inc/uchu/css`
+and `@inc/uchu/pastel-css`.
+
+For Reasonable Colors, install `reasonable-colors` or use the published CSS files directly.
+Variables follow the `--color-COLORNAME-SHADE` pattern, with shade values from `1` through
+`6`; the source also provides alternate color-space files.

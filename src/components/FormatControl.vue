@@ -30,6 +30,7 @@ function selectFormat(format: ColorFormat): void {
 <style scoped>
 .format-control {
   display: grid;
+  align-content: end;
   min-inline-size: 0;
   margin: 0;
   padding: 0;
@@ -46,6 +47,7 @@ function selectFormat(format: ColorFormat): void {
 
 .format-options {
   display: flex;
+  block-size: 2.75rem;
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: 999px;
