@@ -62,6 +62,7 @@ function selectFormat(format: ColorFormat): void {
   background: transparent;
   font-family: var(--font-code);
   font-size: var(--size-sm);
+  font-weight: 500;
   line-height: var(--line-sm);
 }
 

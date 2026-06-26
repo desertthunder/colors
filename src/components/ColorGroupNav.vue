@@ -2,7 +2,7 @@
 import type { Palette } from '../lib/colors'
 import { slugify } from '../lib/slug'
 
-defineProps<{ palette: Palette }>()
+defineProps<{ palette: Palette; activeGroupId: string }>()
 
 function groupId(palette: Palette, groupName: string): string {
   return `${palette.id}-${slugify(groupName)}`
@@ -19,6 +19,7 @@ function scrollToGroup(id: string): void {
       v-for="group in palette.groups"
       :key="group.name"
       type="button"
+      :aria-current="activeGroupId === groupId(palette, group.name) ? 'true' : undefined"
       @click="scrollToGroup(groupId(palette, group.name))">
       {{ group.name }}
     </button>
@@ -52,9 +53,14 @@ function scrollToGroup(id: string): void {
 }
 
 .color-group-nav button:hover,
-.color-group-nav button:focus-visible {
+.color-group-nav button:focus-visible,
+.color-group-nav button[aria-current='true'] {
   border-color: var(--color-accent);
   color: var(--color-accent-strong);
   background: var(--color-accent-soft);
+}
+
+.color-group-nav button[aria-current='true'] {
+  box-shadow: inset 0 0 0 1px var(--color-accent);
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { CopyMode } from '../lib/copy'
 import type { Palette } from '../lib/colors'
 import type { AppRoute } from '../lib/router'
@@ -7,16 +7,62 @@ import ColorGroup from '../components/ColorGroup.vue'
 import ColorGroupNav from '../components/ColorGroupNav.vue'
 import FormatControl from '../components/FormatControl.vue'
 import PaletteTabs from '../components/PaletteTabs.vue'
+import { slugify } from '../lib/slug'
 
-defineProps<{ palette: Palette; route: AppRoute }>()
+const props = defineProps<{ palette: Palette; route: AppRoute }>()
 
 const copyMode = ref<CopyMode>('value')
+const activeGroupId = ref('')
+let observer: IntersectionObserver | null = null
 
 const copyOptions = [
   { label: 'Raw value', value: 'value' },
   { label: 'CSS variable', value: 'css' },
   { label: 'Object entry', value: 'object' },
 ] satisfies { label: string; value: CopyMode }[]
+
+const groupIds = computed(() => props.palette.groups.map((group) => groupId(group.name)))
+
+function groupId(groupName: string): string {
+  return `${props.palette.id}-${slugify(groupName)}`
+}
+
+function observeColorGroups(): void {
+  observer?.disconnect()
+  activeGroupId.value = groupIds.value[0] ?? ''
+
+  observer = new IntersectionObserver(updateActiveGroup, { rootMargin: '-22% 0px -68% 0px', threshold: 0 })
+
+  for (const id of groupIds.value) {
+    const section = document.getElementById(id)
+    if (section) observer.observe(section)
+  }
+}
+
+function updateActiveGroup(entries: IntersectionObserverEntry[]): void {
+  const visible = entries
+    .filter((entry) => entry.isIntersecting)
+    .sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top)
+
+  if (visible[0]?.target.id) {
+    activeGroupId.value = visible[0].target.id
+  }
+}
+
+onMounted(() => {
+  void nextTick(observeColorGroups)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+})
+
+watch(
+  () => props.palette.id,
+  () => {
+    void nextTick(observeColorGroups)
+  },
+)
 </script>
 
 <template>
@@ -40,7 +86,7 @@ const copyOptions = [
       </div>
     </div>
 
-    <ColorGroupNav :palette="palette" />
+    <ColorGroupNav :palette="palette" :active-group-id="activeGroupId" />
 
     <div class="palette-groups">
       <ColorGroup
