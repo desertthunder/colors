@@ -159,11 +159,11 @@ Fallback behavior can be added later if clipboard support becomes a real issue.
 - [x] Install a color conversion library when implementing format helpers (`culori`)
 - [x] Add `hex`, `rgb`, `hsl`, and `oklch` formatting helpers.
 - [x] Build the native hash router for the four routes.
-- [ ] Persist the selected format in the hash route.
-- [ ] Build palette tabs and route-aware navigation state.
-- [ ] Build the shared palette rendering components.
-- [ ] Add copy modes for raw values, CSS variables, and object snippets.
-- [ ] Add click-to-copy and copied state.
+- [x] Persist the selected format in the hash route.
+- [x] Build palette tabs and route-aware navigation state.
+- [x] Build the shared palette rendering components.
+- [x] Add copy modes for raw values, CSS variables, and object snippets.
+- [x] Add click-to-copy and copied state.
 - [ ] Replace temporary intro content with route views.
 - [ ] Add responsive layout polish for the palette grid and controls.
 - [ ] Add lightweight tests for color formatting, copy output, and hash route parsing.
