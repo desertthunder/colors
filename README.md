@@ -1,5 +1,7 @@
 # colors
 
+![MIT License](https://img.shields.io/badge/License-MIT-orange)
+
 A copy-friendly browser for Tailwind CSS v3, uchu, and Reasonable Colors.
 
 ## Features
@@ -74,3 +76,7 @@ pnpm add reasonable-colors
    - [Tailwind CSS v3.4.17 source](https://github.com/tailwindlabs/tailwindcss/tree/v3.4.17)
 2. [uchu](https://code.webb.page/nevercease/uchu.git/about/)
 3. [Reasonable Colors](https://github.com/matthewhowell/reasonable-colors)
+
+## License
+
+[MIT](./LICENSE)

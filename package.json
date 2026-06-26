@@ -1,5 +1,5 @@
 {
-  "name": "colors",
+  "name": "colors-dt",
   "private": true,
   "version": "0.1.0",
   "license": "MIT",
@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "test": "vitest run",
+    "pages:preview": "pnpm build && wrangler pages dev dist",
+    "pages:deploy": "pnpm build && wrangler pages deploy dist",
     "changeset": "changeset",
     "changeset:version": "changeset version"
   },
@@ -29,6 +31,7 @@
     "typescript": "~6.0.2",
     "vite": "^8.1.0",
     "vitest": "^4.1.9",
-    "vue-tsc": "^3.3.5"
+    "vue-tsc": "^3.3.5",
+    "wrangler": "^4.105.0"
   }
 }
