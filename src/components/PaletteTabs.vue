@@ -14,7 +14,7 @@ defineProps<{ route: AppRoute }>()
       :data-active="route.page === palette.id ? '' : undefined">
       <a
         class="palette-link"
-        :href="formatHashRoute({ page: palette.id, format: route.format })"
+        :href="formatHashRoute({ ...route, page: palette.id })"
         :aria-current="route.page === palette.id ? 'page' : undefined">
         <span>{{ palette.name }}</span>
         <small>{{ palette.groups.length }} groups</small>

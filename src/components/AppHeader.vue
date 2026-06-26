@@ -4,7 +4,7 @@ import { formatHashRoute, type AppRoute } from '../lib/router'
 const props = defineProps<{ route: AppRoute }>()
 
 function href(page: AppRoute['page']): string {
-  return formatHashRoute({ page, format: props.route.format })
+  return formatHashRoute({ ...props.route, page })
 }
 </script>
 

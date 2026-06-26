@@ -180,6 +180,7 @@ const bodyBackground = computed(() => {
   gap: var(--space-2);
   padding: var(--space-2);
   background: var(--group-body-background);
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 34rem) {

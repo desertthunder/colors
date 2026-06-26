@@ -5,6 +5,7 @@ import type { Palette } from '../lib/colors'
 import type { AppRoute } from '../lib/router'
 import ColorGroup from '../components/ColorGroup.vue'
 import ColorGroupNav from '../components/ColorGroupNav.vue'
+import ColorSearch from '../components/ColorSearch.vue'
 import FormatControl from '../components/FormatControl.vue'
 import PaletteTabs from '../components/PaletteTabs.vue'
 import { slugify } from '../lib/slug'
@@ -86,9 +87,37 @@ function updateActiveGroup(): void {
   activeGroupId.value = activeId
 }
 
+function focusSwatch(swatchName: string): void {
+  // Find the group containing this swatch and open it.
+  const group = props.palette.groups.find((g) => g.swatches.some((s) => s.name === swatchName))
+  if (!group) return
+
+  const gId = groupId(group.name)
+  if (!openGroupIds.value.has(gId)) {
+    openGroupIds.value = new Set([...openGroupIds.value, gId])
+  }
+
+  void nextTick(() => {
+    const swatchEl = document.querySelector<HTMLElement>(`[data-swatch="${swatchName}"]`)
+    if (!swatchEl) return
+
+    // Account for the sticky palette-nav height so the swatch isn't hidden behind it.
+    const navEl = document.querySelector<HTMLElement>('.palette-nav')
+    const navHeight = (navEl?.offsetHeight ?? 0) + 16
+    const rect = swatchEl.getBoundingClientRect()
+    const targetY = window.scrollY + rect.top - navHeight - (window.innerHeight - rect.height) / 2
+
+    window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' })
+    updateActiveGroup()
+  })
+}
+
 onMounted(() => {
   resetOpenGroups()
-  void nextTick(updateActiveGroup)
+  void nextTick(() => {
+    if (props.route.swatch) focusSwatch(props.route.swatch)
+    else updateActiveGroup()
+  })
   window.addEventListener('scroll', queueActiveGroupUpdate, { passive: true })
   window.addEventListener('resize', queueActiveGroupUpdate)
 })
@@ -103,7 +132,10 @@ watch(
   () => props.palette.id,
   () => {
     resetOpenGroups()
-    void nextTick(updateActiveGroup)
+    void nextTick(() => {
+      if (props.route.swatch) focusSwatch(props.route.swatch)
+      else updateActiveGroup()
+    })
   },
 )
 </script>
@@ -129,7 +161,11 @@ watch(
       </div>
     </div>
 
-    <ColorGroupNav :palette="palette" :active-group-id="activeGroupId" @select-group="selectGroup" />
+    <div class="palette-nav">
+      <ColorSearch :route="route" />
+
+      <ColorGroupNav :palette="palette" :active-group-id="activeGroupId" @select-group="selectGroup" />
+    </div>
 
     <div class="palette-groups">
       <ColorGroup
@@ -157,6 +193,17 @@ watch(
   grid-template-columns: minmax(24rem, 1fr) auto;
   align-items: center;
   gap: var(--space-5);
+}
+
+.palette-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-3);
+  border-block-end: 1px solid var(--color-chrome);
+  background: color-mix(in srgb, var(--color-page) 92%, transparent);
+  padding-block: var(--space-3);
 }
 
 .sr-only {

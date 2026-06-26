@@ -23,7 +23,7 @@ async function copySwatch(): Promise<void> {
 </script>
 
 <template>
-  <button type="button" class="color-swatch" :style="swatchStyle" @click="copySwatch">
+  <button type="button" class="color-swatch" :data-swatch="swatch.name" :style="swatchStyle" @click="copySwatch">
     <span class="swatch-meta">
       <span class="swatch-name">{{ swatch.name }}</span>
       <code>{{ displayedValue }}</code>

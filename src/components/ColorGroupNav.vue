@@ -49,15 +49,9 @@ watch(
 
 <style scoped>
 .color-group-nav {
-  position: sticky;
-  top: 0;
-  z-index: 2;
   display: flex;
   gap: var(--space-2);
   overflow-x: auto;
-  border-bottom: 1px solid var(--color-chrome);
-  background: color-mix(in srgb, var(--color-page) 92%, transparent);
-  padding-block: var(--space-3);
   scrollbar-width: thin;
 }
 

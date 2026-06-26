@@ -6,7 +6,7 @@ import { writeHashRoute } from '../lib/router'
 const props = defineProps<{ route: AppRoute }>()
 
 function selectFormat(format: ColorFormat): void {
-  writeHashRoute({ page: props.route.page, format })
+  writeHashRoute({ ...props.route, format })
 }
 </script>
 
