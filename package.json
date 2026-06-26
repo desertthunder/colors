@@ -1,7 +1,7 @@
 {
   "name": "colors",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -9,7 +9,9 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "changeset": "changeset",
+    "changeset:version": "changeset version"
   },
   "dependencies": {
     "@fontsource-variable/azeret-mono": "^5.2.11",
@@ -19,6 +21,7 @@
     "vue": "^3.5.38"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@types/node": "^24.13.2",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vue/tsconfig": "^0.9.1",

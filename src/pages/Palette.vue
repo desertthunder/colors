@@ -69,6 +69,15 @@ function queueActiveGroupUpdate(): void {
 }
 
 function updateActiveGroup(): void {
+  const lastGroupId = groupIds.value.at(-1)
+  const scrollBottom = window.scrollY + window.innerHeight
+  const documentBottom = document.documentElement.scrollHeight
+
+  if (lastGroupId && scrollBottom >= documentBottom - 2) {
+    activeGroupId.value = lastGroupId
+    return
+  }
+
   const marker = Math.min(window.innerHeight * 0.28, 220)
   let activeId = groupIds.value[0] ?? ''
 

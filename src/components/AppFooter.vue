@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const appVersion = __APP_VERSION__
+</script>
+
 <template>
   <footer class="app-footer">
     <div class="footer-primary">
@@ -6,6 +10,7 @@
         <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Owais </a> in Austin, TX.
       </p>
       <p>License: <a href="https://spdx.org/licenses/MIT" target="_blank">MIT</a></p>
+      <p :title="appVersion.commit">Version: {{ appVersion.display }}</p>
     </div>
 
     <nav class="footer-links" aria-label="Developer links">
