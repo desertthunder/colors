@@ -1,0 +1,60 @@
+<script setup lang="ts">
+import type { Palette } from '../lib/colors'
+import { slugify } from '../lib/slug'
+
+defineProps<{ palette: Palette }>()
+
+function groupId(palette: Palette, groupName: string): string {
+  return `${palette.id}-${slugify(groupName)}`
+}
+
+function scrollToGroup(id: string): void {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+</script>
+
+<template>
+  <nav class="color-group-nav" aria-label="Color groups">
+    <button
+      v-for="group in palette.groups"
+      :key="group.name"
+      type="button"
+      @click="scrollToGroup(groupId(palette, group.name))">
+      {{ group.name }}
+    </button>
+  </nav>
+</template>
+
+<style scoped>
+.color-group-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  border-block: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-page) 92%, transparent);
+  padding-block: var(--space-3);
+  scrollbar-width: thin;
+}
+
+.color-group-nav button {
+  flex: 0 0 auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  font-size: var(--size-sm);
+  font-weight: 700;
+  line-height: var(--line-sm);
+}
+
+.color-group-nav button:hover,
+.color-group-nav button:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+  background: var(--color-accent-soft);
+}
+</style>

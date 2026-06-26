@@ -36,11 +36,11 @@ async function copySwatch(): Promise<void> {
 <style scoped>
 .color-swatch {
   display: grid;
-  gap: var(--space-3);
-  min-block-size: 7rem;
+  gap: var(--space-2);
+  min-block-size: 4.5rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
   color: var(--color-text);
   background: var(--color-surface);
   text-align: start;
@@ -54,13 +54,12 @@ async function copySwatch(): Promise<void> {
 
 .swatch-meta {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-1) var(--space-3);
+  gap: var(--space-1);
   align-items: start;
 }
 
 .sample {
-  block-size: 2.75rem;
+  block-size: 1.75rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--swatch-color);
@@ -75,12 +74,12 @@ async function copySwatch(): Promise<void> {
 
 .swatch-name {
   color: var(--color-text-strong);
+  font-size: var(--size-sm);
   font-weight: 700;
   line-height: var(--line-sm);
 }
 
 .color-swatch code {
-  grid-column: 1 / -1;
   overflow-wrap: anywhere;
   color: var(--color-text-muted);
   font-size: var(--size-xs);

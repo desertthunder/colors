@@ -30,7 +30,6 @@ function selectFormat(format: ColorFormat): void {
 <style scoped>
 .format-control {
   display: grid;
-  gap: var(--space-2);
   min-inline-size: 0;
   margin: 0;
   padding: 0;
@@ -47,17 +46,20 @@ function selectFormat(format: ColorFormat): void {
 
 .format-options {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  padding: var(--space-1);
 }
 
 .format-options button {
-  min-inline-size: 4.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  min-inline-size: 3.75rem;
+  border: 0;
+  border-radius: 999px;
   padding: var(--space-2) var(--space-3);
   color: var(--color-text-muted);
-  background: var(--color-surface);
+  background: transparent;
   font-family: var(--font-code);
   font-size: var(--size-sm);
   line-height: var(--line-sm);
@@ -66,8 +68,18 @@ function selectFormat(format: ColorFormat): void {
 .format-options button:hover,
 .format-options button:focus-visible,
 .format-options button[aria-pressed='true'] {
-  border-color: var(--color-accent);
   color: var(--color-accent-strong);
   background: var(--color-accent-soft);
+}
+
+@media (max-width: 34rem) {
+  .format-options {
+    inline-size: 100%;
+  }
+
+  .format-options button {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
 }
 </style>

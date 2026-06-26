@@ -3,16 +3,13 @@
     <div class="footer-primary">
       <p>
         Built by
-        <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Owais Jamil</a>, a software engineer in
-        Austin, TX.
+        <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Owais </a> in Austin, TX.
       </p>
-      <p>Sources: Tailwind v3, uchu, and Reasonable Colors.</p>
-      <p>License: MIT</p>
+      <p>License: <a href="https://spdx.org/licenses/MIT" target="_blank">MIT</a></p>
     </div>
 
     <nav class="footer-links" aria-label="Developer links">
       <a href="https://github.com/desertthunder" target="_blank" rel="noreferrer">GitHub</a>
-
       <a href="https://desertthunder.dev" target="_blank" rel="noreferrer">Website</a>
     </nav>
   </footer>

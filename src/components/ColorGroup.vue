@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import type { ColorFormat } from '../lib/color'
 import type { CopyMode } from '../lib/copy'
-import type { ColorGroup } from '../lib/colors'
+import type { ColorGroup, PaletteId } from '../lib/colors'
+import { slugify } from '../lib/slug'
 import ColorSwatch from './ColorSwatch.vue'
 
-defineProps<{ group: ColorGroup; format: ColorFormat; copyMode: CopyMode }>()
+defineProps<{ paletteId: PaletteId; group: ColorGroup; format: ColorFormat; copyMode: CopyMode }>()
 </script>
 
 <template>
-  <section class="color-group" :aria-labelledby="`${group.name}-title`">
-    <h3 :id="`${group.name}-title`">{{ group.name }}</h3>
+  <section
+    class="color-group"
+    :id="`${paletteId}-${slugify(group.name)}`"
+    :aria-labelledby="`${paletteId}-${slugify(group.name)}-title`">
+    <h3 :id="`${paletteId}-${slugify(group.name)}-title`">{{ group.name }}</h3>
 
     <div class="swatch-grid">
       <ColorSwatch
@@ -26,6 +30,7 @@ defineProps<{ group: ColorGroup; format: ColorFormat; copyMode: CopyMode }>()
 .color-group {
   display: grid;
   gap: var(--space-3);
+  scroll-margin-block-start: var(--space-8);
 }
 
 .color-group h3 {
@@ -35,7 +40,7 @@ defineProps<{ group: ColorGroup; format: ColorFormat; copyMode: CopyMode }>()
 
 .swatch-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+  gap: var(--space-2);
 }
 </style>

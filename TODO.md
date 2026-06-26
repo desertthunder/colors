@@ -15,7 +15,7 @@ Build a small color reference tool inspired by the Tailwind v3 color docs. It sh
 - Vue/Vite starter UI has been replaced with a simple single-column app shell.
 - Global CSS is split into `src/style.css` for imports/reset/base styles and `src/tokens.css` for tokens.
 - Component-level styles live in scoped Vue component styles.
-- App shell is split across `src/components/AppShell.vue`, `AppHeader.vue`, `IntroSection.vue`, and `AppFooter.vue`.
+- App shell is split across `src/components/AppShell.vue`, `AppHeader.vue`, `AppFooter.vue`, and route views in `src/pages`.
 - Prettier is configured with `pnpm format`.
 - Palette data modules exist in `src/lib/colors`.
 
@@ -117,13 +117,14 @@ Start with a few boring components:
 - `AppShell.vue`: page shell.
 - `AppHeader.vue`: brand and main navigation.
 - `AppFooter.vue`: source summary.
-- `IntroSection.vue`: temporary intro content.
+- `src/pages/PaletteRouteView.vue`: palette route wrapper.
 - `PaletteTabs.vue`: switches between the three palette routes.
 - `FormatControl.vue`: switches copied/displayed color format.
 - `PaletteView.vue`: renders a selected palette.
 - `ColorGroup.vue`: renders one named color group.
 - `ColorSwatch.vue`: renders and copies one color.
-- `AboutView.vue`: source notes and links.
+- `ColorGroupNav.vue`: sticky in-page navigation for long palette group lists.
+- `src/pages/AboutView.vue`: source notes and links.
 
 Avoid adding global state management. Vue component state is enough.
 
@@ -164,14 +165,15 @@ Fallback behavior can be added later if clipboard support becomes a real issue.
 - [x] Build the shared palette rendering components.
 - [x] Add copy modes for raw values, CSS variables, and object snippets.
 - [x] Add click-to-copy and copied state.
-- [ ] Replace temporary intro content with route views.
-- [ ] Add responsive layout polish for the palette grid and controls.
-- [ ] Add lightweight tests for color formatting, copy output, and hash route parsing.
+- [x] Add sticky in-page color group navigation.
+- [x] Replace temporary intro content with route views.
+- [x] Add responsive layout polish for the palette grid and controls.
+- [x] Add lightweight tests for color formatting, copy output, and hash route parsing.
 
 ## V2
 
 - No saved palettes.
 - No custom palette editor.
-- No search until the full palette browsing experience exists.
+- Add search after the full palette browsing experience exists. Use Fuse.js for fuzzy search across palette, group, swatch name, token, and formatted values.
 - No package for Vue Router unless route complexity grows.
 - No advanced color conversion formats until `hex`, `rgb`, and `hsl` are solid.

@@ -1,44 +1,54 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ColorFormat } from '../lib/color'
-import { copyModes, type CopyMode } from '../lib/copy'
+import type { CopyMode } from '../lib/copy'
 import type { Palette } from '../lib/colors'
+import type { AppRoute } from '../lib/router'
 import ColorGroup from './ColorGroup.vue'
+import ColorGroupNav from './ColorGroupNav.vue'
+import FormatControl from './FormatControl.vue'
+import PaletteTabs from './PaletteTabs.vue'
 
-defineProps<{ palette: Palette; format: ColorFormat }>()
+defineProps<{ palette: Palette; route: AppRoute }>()
 
 const copyMode = ref<CopyMode>('value')
+
+const copyOptions = [
+  { label: 'Raw value', value: 'value' },
+  { label: 'CSS variable', value: 'css' },
+  { label: 'Object entry', value: 'object' },
+] satisfies { label: string; value: CopyMode }[]
 </script>
 
 <template>
   <section class="palette-view" :aria-labelledby="`${palette.id}-title`">
     <div class="palette-toolbar">
-      <div>
-        <h2 :id="`${palette.id}-title`">{{ palette.name }}</h2>
-        <a :href="palette.sourceUrl" target="_blank" rel="noreferrer">Source</a>
-      </div>
+      <h2 :id="`${palette.id}-title`" class="sr-only">{{ palette.name }}</h2>
 
-      <fieldset class="copy-control">
-        <legend>Copy</legend>
-        <div class="copy-options">
-          <button
-            v-for="mode in copyModes"
-            :key="mode"
-            type="button"
-            :aria-pressed="copyMode === mode"
-            @click="copyMode = mode">
-            {{ mode }}
-          </button>
-        </div>
-      </fieldset>
+      <PaletteTabs :route="route" />
+
+      <div class="toolbar-controls">
+        <FormatControl :route="route" />
+
+        <fieldset class="copy-control">
+          <label for="copy-mode">Copy as</label>
+          <select id="copy-mode" v-model="copyMode">
+            <option v-for="option in copyOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </fieldset>
+      </div>
     </div>
+
+    <ColorGroupNav :palette="palette" />
 
     <div class="palette-groups">
       <ColorGroup
         v-for="group in palette.groups"
         :key="group.name"
+        :palette-id="palette.id"
         :group="group"
-        :format="format"
+        :format="route.format"
         :copy-mode="copyMode" />
     </div>
   </section>
@@ -48,25 +58,30 @@ const copyMode = ref<CopyMode>('value')
 .palette-view {
   display: grid;
   gap: var(--space-6);
-  padding-block-start: var(--space-6);
 }
 
 .palette-toolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(24rem, 1fr) auto;
   align-items: end;
-  justify-content: space-between;
   gap: var(--space-5);
 }
 
-.palette-toolbar h2 {
-  font-size: var(--size-xl);
-  line-height: var(--line-xl);
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
-.palette-toolbar a {
-  color: var(--color-text-muted);
-  font-size: var(--size-sm);
-  line-height: var(--line-sm);
+.toolbar-controls {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  gap: var(--space-4);
 }
 
 .copy-control {
@@ -77,38 +92,28 @@ const copyMode = ref<CopyMode>('value')
   border: 0;
 }
 
-.copy-control legend {
-  margin-block-end: var(--space-2);
+.copy-control label {
   color: var(--color-text-muted);
   font-size: var(--size-sm);
   font-weight: 700;
   line-height: var(--line-sm);
 }
 
-.copy-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.copy-options button {
-  min-inline-size: 4.75rem;
+.copy-control select {
+  inline-size: 10rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
-  color: var(--color-text-muted);
+  color: var(--color-text-strong);
   background: var(--color-surface);
   font-size: var(--size-sm);
   font-weight: 700;
   line-height: var(--line-sm);
 }
 
-.copy-options button:hover,
-.copy-options button:focus-visible,
-.copy-options button[aria-pressed='true'] {
+.copy-control select:hover,
+.copy-control select:focus-visible {
   border-color: var(--color-accent);
-  color: var(--color-accent-strong);
-  background: var(--color-accent-soft);
 }
 
 .palette-groups {
@@ -119,7 +124,22 @@ const copyMode = ref<CopyMode>('value')
 @media (max-width: 48rem) {
   .palette-toolbar {
     align-items: stretch;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar-controls {
+    flex-wrap: wrap;
+    justify-content: start;
+  }
+}
+
+@media (max-width: 34rem) {
+  .toolbar-controls {
+    display: grid;
+  }
+
+  .copy-control select {
+    inline-size: 100%;
   }
 }
 </style>
