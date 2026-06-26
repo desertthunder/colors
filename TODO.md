@@ -117,10 +117,9 @@ Start with a few boring components:
 - `AppShell.vue`: page shell.
 - `AppHeader.vue`: brand and main navigation.
 - `AppFooter.vue`: source summary.
-- `src/pages/PaletteRouteView.vue`: palette route wrapper.
+- `src/pages/PaletteRouteView.vue`: renders a selected palette route.
 - `PaletteTabs.vue`: switches between the three palette routes.
 - `FormatControl.vue`: switches copied/displayed color format.
-- `PaletteView.vue`: renders a selected palette.
 - `ColorGroup.vue`: renders one named color group.
 - `ColorSwatch.vue`: renders and copies one color.
 - `ColorGroupNav.vue`: sticky in-page navigation for long palette group lists.

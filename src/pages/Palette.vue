@@ -3,10 +3,10 @@ import { ref } from 'vue'
 import type { CopyMode } from '../lib/copy'
 import type { Palette } from '../lib/colors'
 import type { AppRoute } from '../lib/router'
-import ColorGroup from './ColorGroup.vue'
-import ColorGroupNav from './ColorGroupNav.vue'
-import FormatControl from './FormatControl.vue'
-import PaletteTabs from './PaletteTabs.vue'
+import ColorGroup from '../components/ColorGroup.vue'
+import ColorGroupNav from '../components/ColorGroupNav.vue'
+import FormatControl from '../components/FormatControl.vue'
+import PaletteTabs from '../components/PaletteTabs.vue'
 
 defineProps<{ palette: Palette; route: AppRoute }>()
 
@@ -63,7 +63,7 @@ const copyOptions = [
 .palette-toolbar {
   display: grid;
   grid-template-columns: minmax(24rem, 1fr) auto;
-  align-items: end;
+  align-items: center;
   gap: var(--space-5);
 }
 

@@ -40,7 +40,7 @@ defineProps<{ paletteId: PaletteId; group: ColorGroup; format: ColorFormat; copy
 
 .swatch-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(8.5rem, calc((100% - 5 * var(--space-2)) / 6))), 1fr));
   gap: var(--space-2);
 }
 </style>

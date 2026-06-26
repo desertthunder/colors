@@ -14,9 +14,9 @@ importers:
       '@fontsource-variable/hanken-grotesk':
         specifier: ^5.2.8
         version: 5.2.8
-      '@fontsource-variable/ibm-plex-sans':
-        specifier: ^5.2.8
-        version: 5.2.8
+      '@fontsource-variable/mozilla-text':
+        specifier: ^5.2.2
+        version: 5.2.2
       culori:
         specifier: ^4.0.2
         version: 4.0.2
@@ -83,8 +83,8 @@ packages:
   '@fontsource-variable/hanken-grotesk@5.2.8':
     resolution: {integrity: sha512-K7hu09ZKReBc7EifRLeM4K94NZBrxFEg0nGcISmVwlFQOJo4EmYkLXTWEwr5JcNW4z2hr5zy8vLS2sxC8JDmrQ==}
 
-  '@fontsource-variable/ibm-plex-sans@5.2.8':
-    resolution: {integrity: sha512-n5PF2iFa0CZT0QYTPzxvZ39opC9LnU0zdoRccoADbs+Dtsd+lbXOZF7RNuIPHcQX1dKjF63sxnRImQIB5eD0Ag==}
+  '@fontsource-variable/mozilla-text@5.2.2':
+    resolution: {integrity: sha512-lIXYrFG2SHIOd4HMM9XYxgzscIUG2rcVjeDSlqJ8gfMg6cRMFwXvUe5m2L3fU/tB2nmp12+ut8sGCSjJEdimEw==}
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
@@ -654,7 +654,7 @@ snapshots:
 
   '@fontsource-variable/hanken-grotesk@5.2.8': {}
 
-  '@fontsource-variable/ibm-plex-sans@5.2.8': {}
+  '@fontsource-variable/mozilla-text@5.2.2': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 

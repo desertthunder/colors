@@ -4,8 +4,8 @@ import AppFooter from './AppFooter.vue'
 import AppHeader from './AppHeader.vue'
 import { getPalette } from '../lib/colors'
 import type { AppRoute } from '../lib/router'
-import AboutView from '../pages/AboutView.vue'
-import PaletteRouteView from '../pages/PaletteRouteView.vue'
+import AboutView from '../pages/About.vue'
+import PaletteRouteView from '../pages/Palette.vue'
 
 const props = defineProps<{ route: AppRoute }>()
 
