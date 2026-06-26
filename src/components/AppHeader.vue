@@ -39,9 +39,12 @@ function href(page: AppRoute['page']): string {
 .app-nav {
   display: flex;
   align-items: center;
+  gap: var(--space-1);
 }
 
 .brand {
+  display: flex;
+  align-items: center;
   gap: var(--space-3);
   color: var(--color-text-strong);
   font-family: var(--font-display);
@@ -85,8 +88,7 @@ function href(page: AppRoute['page']): string {
     text-align: center;
   }
 
-  .brand,
-  .app-nav {
+  .brand {
     justify-content: center;
   }
 }

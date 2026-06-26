@@ -31,7 +31,19 @@ export function formatColorValue(color: ColorValue, format: ColorFormat): string
 
 /** Returns the swatch value with the highest OKLCH lightness in a group. */
 export function getLightestSwatchValue(swatches: ColorSwatch[]): string | undefined {
-  let lightest: { lightness: number; value: string } | undefined
+  return getExtremeSwatchValue(swatches, (a, b) => a > b)
+}
+
+/** Returns the swatch value with the lowest OKLCH lightness in a group. */
+export function getDarkestSwatchValue(swatches: ColorSwatch[]): string | undefined {
+  return getExtremeSwatchValue(swatches, (a, b) => a < b)
+}
+
+function getExtremeSwatchValue(
+  swatches: ColorSwatch[],
+  isMoreExtreme: (candidate: number, current: number) => boolean,
+): string | undefined {
+  let extreme: { lightness: number; value: string } | undefined
 
   for (const swatch of swatches) {
     if (swatch.value.space === 'keyword') continue
@@ -40,12 +52,12 @@ export function getLightestSwatchValue(swatches: ColorSwatch[]): string | undefi
     const oklch = parsed ? toOklch(parsed) : undefined
     if (!oklch || typeof oklch.l !== 'number') continue
 
-    if (!lightest || oklch.l > lightest.lightness) {
-      lightest = { lightness: oklch.l, value: swatch.value.value }
+    if (!extreme || isMoreExtreme(oklch.l, extreme.lightness)) {
+      extreme = { lightness: oklch.l, value: swatch.value.value }
     }
   }
 
-  return lightest?.value
+  return extreme?.value
 }
 
 function formatOklch(color: CuloriColor): string | undefined {

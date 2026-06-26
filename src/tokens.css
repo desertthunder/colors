@@ -3,6 +3,8 @@
   --font-text: 'Mozilla Text Variable', system-ui, sans-serif;
   --font-code: 'Azeret Mono Variable', ui-monospace, monospace;
 
+  color-scheme: light;
+
   --color-page: #f8fafc;
   --color-surface: #ffffff;
   --color-text: #1f2937;
@@ -41,4 +43,19 @@
 
   --shadow-soft: 0 1rem 3rem rgb(15 23 42 / 0.08);
   --measure: 72rem;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-page: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #cbd5e1;
+  --color-text-strong: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-accent: #38bdf8;
+  --color-accent-strong: #7dd3fc;
+  --color-accent-soft: #0c4a6e;
+  --color-chrome: var(--color-accent-soft);
+  --shadow-soft: 0 1rem 3rem rgb(0 0 0 / 0.4);
 }

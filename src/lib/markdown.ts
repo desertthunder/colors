@@ -13,7 +13,6 @@ export type MarkdownBlock =
 export function parseMarkdownCopy(markdown: string): MarkdownBlock[] {
   const blocks: MarkdownBlock[] = []
   let paragraph: string[] = []
-
   for (const line of markdown.split(/\r?\n/)) {
     const trimmed = line.trim()
     const heading = /^(#{1,3})\s+(.+)$/.exec(trimmed)
@@ -43,18 +42,18 @@ function parseInlineMarkdown(value: string): MarkdownInline[] {
   const parts: MarkdownInline[] = []
   const linkPattern = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g
   const codePattern = /`([^`]+)`/g
-  let index = 0
+  let i = 0
 
-  while (index < value.length) {
-    linkPattern.lastIndex = index
-    codePattern.lastIndex = index
+  while (i < value.length) {
+    linkPattern.lastIndex = i
+    codePattern.lastIndex = i
 
     const link = linkPattern.exec(value)
     const code = codePattern.exec(value)
     const match = earliest(link, code)
 
     if (!match) break
-    if (match.index > index) parts.push({ type: 'text', text: value.slice(index, match.index) })
+    if (match.index > i) parts.push({ type: 'text', text: value.slice(i, match.index) })
 
     if (match === link) {
       parts.push({ type: 'link', text: match[1], href: match[2] })
@@ -62,11 +61,11 @@ function parseInlineMarkdown(value: string): MarkdownInline[] {
       parts.push({ type: 'code', text: match[1] })
     }
 
-    index = match.index + match[0].length
+    i = match.index + match[0].length
   }
 
-  if (index < value.length) {
-    parts.push({ type: 'text', text: value.slice(index) })
+  if (i < value.length) {
+    parts.push({ type: 'text', text: value.slice(i) })
   }
 
   return parts

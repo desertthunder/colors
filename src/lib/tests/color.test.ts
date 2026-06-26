@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatColorValue, getLightestSwatchValue } from '../color'
+import { formatColorValue, getDarkestSwatchValue, getLightestSwatchValue } from '../color'
 import type { ColorSwatch, ColorValue } from '../colors'
 
 describe('formatColorValue', () => {
@@ -31,5 +31,15 @@ describe('formatColorValue', () => {
     ] satisfies ColorSwatch[]
 
     expect(getLightestSwatchValue(swatches)).toBe('#fff')
+  })
+
+  it('finds the darkest parseable swatch value', () => {
+    const swatches = [
+      { name: 'current', token: '--current', value: { space: 'keyword', value: 'currentColor' } },
+      { name: 'black', token: '--black', value: { space: 'hex', value: '#000' } },
+      { name: 'white', token: '--white', value: { space: 'hex', value: '#fff' } },
+    ] satisfies ColorSwatch[]
+
+    expect(getDarkestSwatchValue(swatches)).toBe('#000')
   })
 })

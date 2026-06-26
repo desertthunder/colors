@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { getLightestSwatchValue, type ColorFormat } from '../lib/color'
+import { getDarkestSwatchValue, getLightestSwatchValue, type ColorFormat } from '../lib/color'
 import type { CopyMode } from '../lib/copy'
 import type { ColorGroup, PaletteId } from '../lib/colors'
 import { slugify } from '../lib/slug'
+import { useTheme } from '../lib/theme'
 import ColorSwatch from './ColorSwatch.vue'
 
 const props = defineProps<{
@@ -17,7 +18,14 @@ const props = defineProps<{
 
 defineEmits<{ toggle: [] }>()
 
-const bodyBackground = computed(() => getLightestSwatchValue(props.group.swatches) ?? 'var(--color-surface)')
+const { theme } = useTheme()
+
+const bodyBackground = computed(() => {
+  const fallback = 'var(--color-surface)'
+  const value =
+    theme.value === 'dark' ? getDarkestSwatchValue(props.group.swatches) : getLightestSwatchValue(props.group.swatches)
+  return value ?? fallback
+})
 </script>
 
 <template>
