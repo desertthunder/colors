@@ -176,12 +176,12 @@ const bodyBackground = computed(() => getLightestSwatchValue(props.group.swatche
 
 @media (max-width: 34rem) {
   .group-summary {
-    grid-template-columns: minmax(0, max-content) 2.5rem;
+    grid-template-columns: minmax(0, max-content) 2.5rem minmax(3rem, 5rem);
   }
 
   .group-ramp {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    grid-column: auto;
+    grid-row: auto;
   }
 }
 </style>

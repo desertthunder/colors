@@ -56,7 +56,7 @@ function selectFormat(format: ColorFormat): void {
 }
 
 .format-options button {
-  min-inline-size: 3.75rem;
+  min-inline-size: 3.25rem;
   border: 0;
   border-radius: 999px;
   padding: var(--space-2) var(--space-3);
@@ -83,6 +83,7 @@ function selectFormat(format: ColorFormat): void {
   .format-options button {
     flex: 1 1 0;
     min-inline-size: 0;
+    padding-inline: var(--space-2);
   }
 }
 </style>

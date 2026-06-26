@@ -28,8 +28,11 @@ function href(page: AppRoute['page']): string {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+  inline-size: 100%;
+  background: var(--color-chrome);
+  padding-inline: max(var(--space-5), calc((100vw - var(--measure)) / 2 + var(--space-5)));
   padding-block: var(--space-5);
-  border-block-end: 1px solid var(--color-border);
+  border-block-end: 1px solid var(--color-chrome);
 }
 
 .brand,
@@ -76,8 +79,15 @@ function href(page: AppRoute['page']): string {
 
 @media (max-width: 48rem) {
   .app-header {
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
+    padding-inline: var(--space-4);
+    text-align: center;
+  }
+
+  .brand,
+  .app-nav {
+    justify-content: center;
   }
 }
 </style>

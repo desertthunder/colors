@@ -18,6 +18,7 @@ html {
   line-height: var(--line-base);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

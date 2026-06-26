@@ -31,7 +31,7 @@ function groupId(palette: Palette, groupName: string): string {
   display: flex;
   gap: var(--space-2);
   overflow-x: auto;
-  border-block: 1px solid var(--color-border);
+  border-block: 1px solid var(--color-chrome);
   background: color-mix(in srgb, var(--color-page) 92%, transparent);
   padding-block: var(--space-3);
   scrollbar-width: thin;

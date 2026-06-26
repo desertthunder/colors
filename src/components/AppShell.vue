@@ -33,19 +33,20 @@ const activePalette = computed(() => {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-block-size: 100svh;
-  inline-size: min(100%, var(--measure));
-  margin-inline: auto;
-  padding-inline: var(--space-5);
+  inline-size: 100%;
 }
 
 .app-main {
   display: grid;
   align-content: start;
+  inline-size: min(100%, var(--measure));
+  margin-inline: auto;
+  padding-inline: var(--space-5);
   padding-block: var(--space-6);
 }
 
 @media (max-width: 48rem) {
-  .app-shell {
+  .app-main {
     padding-inline: var(--space-4);
   }
 }

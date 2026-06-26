@@ -226,14 +226,15 @@ watch(
   }
 
   .toolbar-controls {
-    flex-wrap: wrap;
-    justify-content: start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(8rem, auto);
+    justify-content: stretch;
   }
 }
 
 @media (max-width: 34rem) {
   .toolbar-controls {
-    display: grid;
+    gap: var(--space-2);
   }
 
   .copy-control select {

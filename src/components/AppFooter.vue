@@ -26,8 +26,11 @@ const appVersion = __APP_VERSION__
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+  inline-size: 100%;
+  background: var(--color-chrome);
+  padding-inline: max(var(--space-5), calc((100vw - var(--measure)) / 2 + var(--space-5)));
   padding-block: var(--space-5);
-  border-block-start: 1px solid var(--color-border);
+  border-block-start: 1px solid var(--color-chrome);
   color: var(--color-text-muted);
   font-size: var(--size-sm);
   line-height: var(--line-sm);
@@ -60,6 +63,7 @@ const appVersion = __APP_VERSION__
   .app-footer {
     align-items: flex-start;
     flex-direction: column;
+    padding-inline: var(--space-4);
   }
 }
 </style>
