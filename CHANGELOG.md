@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## [Unreleased]
+## 1.0.0
 
-### Added
+A copyable color palettes based on uchu, reasonable, & tailwind (v3).
 
 - Complete palette data for Tailwind CSS v3, uchu, and Reasonable Colors.
 - Color formatting helpers for `hex`, `rgb`, `hsl`, and `oklch`.
