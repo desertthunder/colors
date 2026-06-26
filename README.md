@@ -1,8 +1,8 @@
-# colors
+![colors banner](./.github/assets/banner.png)
 
 ![MIT License](https://img.shields.io/badge/License-MIT-orange)
 
-A copy-friendly browser for Tailwind CSS v3, uchu, and Reasonable Colors.
+_Colors_ is copy-friendly browser for Tailwind CSS v3, uchu, and Reasonable Colors.
 
 ## Features
 
