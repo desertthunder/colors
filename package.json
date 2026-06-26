@@ -22,7 +22,6 @@
     "prettier": "^3.8.4",
     "typescript": "~6.0.2",
     "vite": "^8.1.0",
-    "vue-tsc": "^3.3.5",
-    "prettier": "^3.8.4"
+    "vue-tsc": "^3.3.5"
   }
 }
