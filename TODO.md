@@ -1,5 +1,66 @@
 # TODO
 
+## Algorithmic Palettes and Swatch Exports
+
+- [ ] Create `src/lib/generate.ts` with typed palette recipes for tone scales, blend
+      ramps, and group smoothing.
+- [ ] Reuse `culori` for OKLCH conversion, interpolation, gamut mapping, color
+      difference checks, and contrast checks.
+- [ ] Add deterministic tests for generated step counts, endpoint preservation, token
+      naming, and invalid recipe handling.
+- [ ] Add `src/lib/export.ts` helpers for complete-palette and group-level CSS custom
+      property output.
+- [ ] Add tests for CSS variable formatting across `hex`, `rgb`, `hsl`, and `oklch`.
+- [ ] Add an SVG swatch sheet generator that escapes labels, uses deterministic
+      dimensions, and includes token/value text.
+- [ ] Add tests for SVG output structure, escaped text, generated dimensions, and stable
+      filenames.
+- [ ] Add browser-only PNG export by rendering the generated SVG into a `canvas` and
+      downloading with `toBlob`.
+- [ ] Add a compact Generate/Export panel to the palette toolbar without crowding the
+      existing format and copy controls.
+- [ ] Render generated palettes with existing `ColorGroup`/`ColorSwatch` components
+      where possible.
+- [ ] Support copy-all CSS variables for generated palettes and copy-group CSS variables
+      for generated groups.
+- [ ] Add visible warnings for low contrast, clipped gamut, or colors that changed
+      materially during gamut mapping.
+- [ ] Keep generated palettes as UI state for the first version; specify persistence
+      separately before adding storage.
+- [ ] Run `pnpm test` and `pnpm build` before implementation handoff.
+
+## Base16 Scheme Lab
+
+- [ ] Create `src/lib/base16.ts` with `Base16Key`, ordered key constants,
+      `Base16Scheme`, semantic role metadata, and validation helpers.
+- [ ] Add `formatBase16Yaml` for tinted-theming common scheme output with `system`,
+      `name`, `slug`, `author`, `variant`, and `palette.base00` through `base0F`.
+- [ ] Add `formatBase16CssVariables` for `--base00` through `--base0F` output and any
+      documented semantic aliases.
+- [ ] Add `src/lib/base16-generate.ts` for deterministic sample-first, seeded, and
+      assisted-remapping generation modes.
+- [ ] Use `culori` for OKLCH ramp generation, hue matching, gamut mapping, color
+      difference checks, and contrast validation.
+- [ ] Support locked Base16 slots so regeneration preserves hand-picked colors.
+- [ ] Add `src/lib/base16-samples.ts` with curated samples for Catppuccin, Gruvbox,
+      Iceberg, Carbonfox, Vitesse, and Eldritch where licensing and attribution are
+      clear.
+- [ ] Prefer official tinted-theming Base16 mappings when available; mark hand-adapted
+      samples with an `approximation` flag.
+- [ ] Add tests for key ordering, validation, slug fallback, YAML formatting, CSS
+      formatting, sample integrity, and locked-slot generation.
+- [ ] Add a Base16 Lab view or panel with sample selection, metadata fields, variant
+      toggle, seed controls, generation controls, and a fixed 16-slot editing grid.
+- [ ] Add per-slot color editing and lock toggles for `base00` through `base0F`.
+- [ ] Add a live editor preview using Vue markup and CSS variables for syntax, diff,
+      search, selection, diagnostics, line numbers, statusline, and terminal ANSI
+      swatches.
+- [ ] Add export actions for tinted-theming YAML, CSS variables, SVG swatch sheet, and
+      PNG swatch sheet generated from canvas blobs.
+- [ ] Keep YAML import and real Vim/Neovim colorscheme template generation as later
+      milestones unless users need them immediately.
+- [ ] Run `pnpm test` and `pnpm build` before implementation handoff.
+
 ## Search
 
 - [x] Install Fuse.js.
