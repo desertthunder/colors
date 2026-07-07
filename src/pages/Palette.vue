@@ -10,7 +10,7 @@ import ColorSearch from '../components/ColorSearch.vue'
 import FormatControl from '../components/FormatControl.vue'
 import GenerateExportDrawer from '../components/GenerateExportDrawer.vue'
 import PaletteTabs from '../components/PaletteTabs.vue'
-import { getGeneratedWarnings } from '../lib/generate/warnings'
+import { Warning } from '../lib/generate/warnings'
 import { slugify } from '../lib/slug'
 
 const props = defineProps<{ palette: Palette; route: AppRoute; generateRequestId?: number }>()
@@ -30,7 +30,7 @@ const copyOpts = [
 ] satisfies { label: string; value: CopyMode }[]
 
 const groupIds = computed(() => props.palette.groups.map((group) => groupId(group.name)))
-const generatedWarnings = computed(() => (generatedPalette.value ? getGeneratedWarnings(generatedPalette.value) : []))
+const generatedWarnings = computed(() => (generatedPalette.value ? Warning.forPalette(generatedPalette.value) : []))
 
 const groupId = (groupName: string): string => `${props.palette.id}-${slugify(groupName)}`
 const generatedGroupId = (groupName: string): string =>
@@ -225,7 +225,7 @@ watch(
       </header>
 
       <ul v-if="generatedWarnings.length" class="generated-warnings" aria-label="Generated palette warnings">
-        <li v-for="warning in generatedWarnings" :key="warning.type">
+        <li v-for="warning in generatedWarnings" :key="warning.kind">
           <strong>{{ warning.message }}</strong>
           <span>{{ warning.tokens.join(', ') }}</span>
         </li>

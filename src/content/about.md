@@ -1,7 +1,10 @@
 # A practical browser for color systems
 
 This tool brings Tailwind CSS, uchu, and Reasonable Colors into one place so palette values
-can be inspected, converted, and copied without switching between source docs.
+can be inspected, converted, exported, and copied without switching between source docs.
+
+It can also generate new palettes from those source colors for quick experiments and
+handoff-ready exports.
 
 ## Palette sources
 
@@ -32,6 +35,25 @@ Every palette keeps its source naming style.
 
 Format controls change the displayed value, while copy modes produce raw values,
 CSS custom properties, or JavaScript object entries per selected palette.
+
+## Generated palettes
+
+The Generator starts from the active source palette and keeps the result local to the
+page. It can build tone scales, OKLCH blend ramps, smoothed source groups, and harmony
+palettes such as complementary, analogous, triadic, tetradic, and split-complementary sets.
+
+Generated colors are fit into sRGB before export so high-chroma OKLCH colors are reduced
+instead of being clipped after the fact.
+
+The app still reports warnings when a generated color has no black or white text option
+at the target contrast, falls outside gamut, or changes materially during mapping.
+
+## Exports
+
+Generated palettes can be copied as CSS custom properties, either as a complete palette or
+one generated group at a time.
+
+You can also download a palette as an SVG or PNG swatch sheet.
 
 ## Using the source palettes
 

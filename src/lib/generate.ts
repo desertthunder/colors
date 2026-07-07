@@ -19,7 +19,7 @@ const CHROMA_FIT_ITERS = 18
 const RGB_CHANNEL_TOLERANCE = 0.000001
 
 /** Culori converters */
-const C = {
+export const C = {
   toOklch: converter('oklch'),
   toRgb: converter('rgb'),
   toRgbGamut: clampGamut('rgb'),

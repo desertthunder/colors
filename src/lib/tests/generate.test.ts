@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { converter, displayable } from 'culori'
-import { fitOklchToSrgb, generatePalette, getGenerateableSwatches } from '../generate'
+import { displayable } from 'culori'
+import { fitOklchToSrgb, generatePalette, getGenerateableSwatches, C } from '../generate'
 import type { Palette } from '../colors'
-
-const toOklch = converter('oklch')
-const toRgb = converter('rgb')
 
 const testPalette = {
   id: 'tailwind',
@@ -47,7 +44,7 @@ describe('generatePalette', () => {
   it('fits high-chroma OKLCH colors into sRGB before gamut mapping', () => {
     const desired = { mode: 'oklch', l: 0.72, c: 0.42, h: 145 }
     const fitted = fitOklchToSrgb(desired)
-    const fittedOklch = toOklch(fitted.color)
+    const fittedOklch = C.toOklch(fitted.color)
 
     expect(fitted.adjusted).toBe(true)
     expect(isDisplayableInSrgb(fitted.color)).toBe(true)
@@ -223,7 +220,7 @@ describe('generatePalette', () => {
   })
 })
 
-function isDisplayableInSrgb(color: Parameters<typeof toRgb>[0]): boolean {
-  const rgb = toRgb(color)
+function isDisplayableInSrgb(color: Parameters<typeof C.toRgb>[0]): boolean {
+  const rgb = C.toRgb(color)
   return Boolean(rgb && displayable(rgb))
 }

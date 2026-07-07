@@ -1,14 +1,20 @@
+<!-- markdownlint-disable MD041 -->
 ![colors banner](./.github/assets/banner.png)
 
 ![MIT License](https://img.shields.io/badge/License-MIT-orange)
 
-_Colors_ is copy-friendly browser for Tailwind CSS v3, uchu, and Reasonable Colors.
+_Colors_ is a copy-friendly browser and generator for Tailwind CSS v3, uchu, and
+Reasonable Colors.
 
 ## Features
 
 - Browse all three palette systems from one interface.
 - Switch displayed values between `hex`, `rgb`, `hsl`, and `oklch`.
 - Copy raw values, CSS custom properties, or JavaScript object entries.
+- Generate local tone scales, OKLCH blend ramps, smoothed groups, and harmony palettes
+  from source swatches.
+- Copy generated palettes as CSS custom properties.
+- Export deterministic SVG swatch sheets or browser-rendered PNG swatch sheets.
 - Navigate long palettes with a sticky color-group picker and scrollspy highlight.
 - Collapse color groups with accordion sections.
 - Preview each group with a compact light-to-dark swatch ramp.

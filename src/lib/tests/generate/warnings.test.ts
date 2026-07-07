@@ -24,9 +24,9 @@ const generatedPalette = {
 describe('Warning.forPalette', () => {
   it('summarizes low contrast, gamut clipping, and material color changes', () => {
     expect(Warning.forPalette(generatedPalette)).toEqual([
-      { type: 'low-contrast', message: 'No black or white text reaches 4.5:1 contrast', tokens: ['--risky'] },
-      { type: 'clipped-gamut', message: 'Mapped into sRGB gamut', tokens: ['--risky'] },
-      { type: 'mapped-color', message: 'Changed materially during gamut mapping (Delta E >= 2)', tokens: ['--risky'] },
+      new Warning('low-contrast', ['--risky'], 'No black or white text reaches 4.5:1 contrast'),
+      new Warning('clipped-gamut', ['--risky'], 'Mapped into sRGB gamut'),
+      new Warning('mapped-color', ['--risky'], 'Changed materially during gamut mapping (Delta E >= 2)'),
     ])
   })
 
