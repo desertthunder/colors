@@ -2,6 +2,7 @@
 import { formatHashRoute, type AppRoute } from '../lib/router'
 
 const props = defineProps<{ route: AppRoute }>()
+defineEmits<{ 'open-generate': [] }>()
 
 function href(page: AppRoute['page']): string {
   return formatHashRoute({ ...props.route, page })
@@ -18,6 +19,7 @@ function href(page: AppRoute['page']): string {
     <nav class="app-nav" aria-label="Main navigation">
       <a :href="href('tailwind')" :aria-current="route.page !== 'about' ? 'page' : undefined">Palettes</a>
       <a :href="href('about')" :aria-current="route.page === 'about' ? 'page' : undefined">About</a>
+      <button v-if="route.page !== 'about'" type="button" @click="$emit('open-generate')">Generate</button>
     </nav>
   </header>
 </template>
@@ -63,10 +65,13 @@ function href(page: AppRoute['page']): string {
   gap: var(--space-2);
 }
 
-.app-nav a {
+.app-nav a,
+.app-nav button {
   border-radius: var(--radius-sm);
+  border: 0;
   padding: var(--space-2) var(--space-3);
   color: var(--color-text-muted);
+  background: transparent;
   font-size: var(--size-sm);
   font-weight: 600;
   line-height: var(--line-sm);
@@ -75,7 +80,9 @@ function href(page: AppRoute['page']): string {
 
 .app-nav a:hover,
 .app-nav a:focus-visible,
-.app-nav a[aria-current='page'] {
+.app-nav a[aria-current='page'],
+.app-nav button:hover,
+.app-nav button:focus-visible {
   color: var(--color-accent-strong);
   background: var(--color-accent-soft);
 }

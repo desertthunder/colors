@@ -17,17 +17,17 @@
       filenames.
 - [x] Add browser-only PNG export by rendering the generated SVG into a `canvas` and
       downloading with `toBlob`.
-- [ ] Add a compact Generate/Export panel to the palette toolbar without crowding the
+- [x] Add a compact Generate/Export panel to the palette toolbar without crowding the
       existing format and copy controls.
-- [ ] Render generated palettes with existing `ColorGroup`/`ColorSwatch` components
+- [x] Render generated palettes with existing `ColorGroup`/`ColorSwatch` components
       where possible.
-- [ ] Support copy-all CSS variables for generated palettes and copy-group CSS variables
+- [x] Support copy-all CSS variables for generated palettes and copy-group CSS variables
       for generated groups.
-- [ ] Add visible warnings for low contrast, clipped gamut, or colors that changed
+- [x] Add visible warnings for low contrast, clipped gamut, or colors that changed
       materially during gamut mapping.
-- [ ] Keep generated palettes as UI state for the first version; specify persistence
+- [x] Keep generated palettes as UI state for the first version; specify persistence
       separately before adding storage.
-- [ ] Run `pnpm test` and `pnpm build` before implementation handoff.
+- [x] Run `pnpm test` and `pnpm build` before implementation handoff.
 
 ## Base16 Scheme Lab
 

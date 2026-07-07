@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { CopyMode } from '../lib/copy'
+import type { GeneratedPalette } from '../lib/generate'
 import type { Palette } from '../lib/colors'
 import type { AppRoute } from '../lib/router'
 import ColorGroup from '../components/ColorGroup.vue'
 import ColorGroupNav from '../components/ColorGroupNav.vue'
 import ColorSearch from '../components/ColorSearch.vue'
 import FormatControl from '../components/FormatControl.vue'
+import GenerateExportDrawer from '../components/GenerateExportDrawer.vue'
 import PaletteTabs from '../components/PaletteTabs.vue'
+import { getGeneratedWarnings } from '../lib/generate/warnings'
 import { slugify } from '../lib/slug'
 
-const props = defineProps<{ palette: Palette; route: AppRoute }>()
+const props = defineProps<{ palette: Palette; route: AppRoute; generateRequestId?: number }>()
 const copyMode = ref<CopyMode>('value')
 const activeGroupId = ref('')
+const generatedDrawerOpen = ref(false)
+const generatedPalette = ref<GeneratedPalette | null>(null)
+const openGeneratedGroupIds = ref(new Set<string>())
 const openGroupIds = ref(new Set<string>())
 
 let scrollFrame = 0
@@ -24,14 +30,18 @@ const copyOpts = [
 ] satisfies { label: string; value: CopyMode }[]
 
 const groupIds = computed(() => props.palette.groups.map((group) => groupId(group.name)))
+const generatedWarnings = computed(() => (generatedPalette.value ? getGeneratedWarnings(generatedPalette.value) : []))
 
 const groupId = (groupName: string): string => `${props.palette.id}-${slugify(groupName)}`
+const generatedGroupId = (groupName: string): string =>
+  `${generatedPalette.value?.id ?? 'generated'}-${slugify(groupName)}`
 
 function resetOpenGroups(): void {
   openGroupIds.value = new Set(groupIds.value)
 }
 
 const isGroupOpen = (id: string): boolean => openGroupIds.value.has(id)
+const isGeneratedGroupOpen = (id: string): boolean => openGeneratedGroupIds.value.has(id)
 
 function toggleGroup(id: string): void {
   const next = new Set(openGroupIds.value)
@@ -43,6 +53,21 @@ function toggleGroup(id: string): void {
   openGroupIds.value = next
 
   void nextTick(updateActiveGroup)
+}
+
+function toggleGeneratedGroup(id: string): void {
+  const next = new Set(openGeneratedGroupIds.value)
+  if (next.has(id)) {
+    next.delete(id)
+  } else {
+    next.add(id)
+  }
+  openGeneratedGroupIds.value = next
+}
+
+function setGeneratedPalette(palette: GeneratedPalette): void {
+  generatedPalette.value = palette
+  openGeneratedGroupIds.value = new Set(palette.groups.map((group) => `${palette.id}-${slugify(group.name)}`))
 }
 
 function selectGroup(id: string): void {
@@ -131,11 +156,20 @@ onBeforeUnmount(() => {
 watch(
   () => props.palette.id,
   () => {
+    generatedPalette.value = null
+    openGeneratedGroupIds.value = new Set()
     resetOpenGroups()
     void nextTick(() => {
       if (props.route.swatch) focusSwatch(props.route.swatch)
       else updateActiveGroup()
     })
+  },
+)
+
+watch(
+  () => props.generateRequestId,
+  (requestId) => {
+    if (requestId) generatedDrawerOpen.value = true
   },
 )
 </script>
@@ -179,6 +213,42 @@ watch(
         :is-open="isGroupOpen(groupId(group.name))"
         @toggle="toggleGroup(groupId(group.name))" />
     </div>
+
+    <section v-if="generatedPalette" class="generated-results" :aria-labelledby="`${generatedPalette.id}-title`">
+      <header class="generated-header">
+        <div>
+          <h2 :id="`${generatedPalette.id}-title`">{{ generatedPalette.name }}</h2>
+          <p>{{ generatedPalette.recipe.mode }}</p>
+        </div>
+
+        <button type="button" class="generated-edit" @click="generatedDrawerOpen = true">Export</button>
+      </header>
+
+      <ul v-if="generatedWarnings.length" class="generated-warnings" aria-label="Generated palette warnings">
+        <li v-for="warning in generatedWarnings" :key="warning.type">
+          <strong>{{ warning.message }}</strong>
+          <span>{{ warning.tokens.join(', ') }}</span>
+        </li>
+      </ul>
+
+      <ColorGroup
+        v-for="group in generatedPalette.groups"
+        :key="group.name"
+        :palette-id="generatedPalette.id"
+        :group="group"
+        :format="route.format"
+        :copy-mode="copyMode"
+        :is-active="false"
+        :is-open="isGeneratedGroupOpen(generatedGroupId(group.name))"
+        @toggle="toggleGeneratedGroup(generatedGroupId(group.name))" />
+    </section>
+
+    <GenerateExportDrawer
+      v-model:open="generatedDrawerOpen"
+      :palette="palette"
+      :format="route.format"
+      :generated-palette="generatedPalette"
+      @generated="setGeneratedPalette" />
   </section>
 </template>
 
@@ -257,9 +327,80 @@ watch(
   border-color: var(--color-accent);
 }
 
+.generated-edit {
+  align-self: end;
+  min-block-size: 2.75rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-page);
+  background: var(--color-accent-strong);
+  font-size: var(--size-sm);
+  font-weight: 700;
+  line-height: var(--line-sm);
+}
+
+.generated-edit:hover,
+.generated-edit:focus-visible {
+  box-shadow: var(--shadow-soft);
+}
+
 .palette-groups {
   display: grid;
   gap: var(--space-6);
+}
+
+.generated-results {
+  display: grid;
+  gap: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
+  padding-block-start: var(--space-6);
+}
+
+.generated-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.generated-header h2 {
+  font-size: var(--size-xl);
+  line-height: var(--line-xl);
+}
+
+.generated-header p {
+  color: var(--color-text-muted);
+  font-family: var(--font-code);
+  font-size: var(--size-sm);
+  line-height: var(--line-sm);
+}
+
+.generated-warnings {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.generated-warnings li {
+  display: grid;
+  gap: var(--space-1);
+  border-inline-start: 3px solid var(--color-accent);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-accent-soft);
+}
+
+.generated-warnings strong,
+.generated-warnings span {
+  overflow-wrap: anywhere;
+  font-size: var(--size-sm);
+  line-height: var(--line-sm);
+}
+
+.generated-warnings span {
+  color: var(--color-text-muted);
 }
 
 @media (max-width: 48rem) {
@@ -282,6 +423,11 @@ watch(
 
   .copy-control select {
     inline-size: 100%;
+  }
+
+  .generated-header {
+    display: grid;
+    align-items: stretch;
   }
 }
 </style>

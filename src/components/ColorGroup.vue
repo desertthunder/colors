@@ -2,13 +2,13 @@
 import { computed } from 'vue'
 import { getDarkestSwatchValue, getLightestSwatchValue, type ColorFormat } from '../lib/color'
 import type { CopyMode } from '../lib/copy'
-import type { ColorGroup, PaletteId } from '../lib/colors'
+import type { ColorGroup } from '../lib/colors'
 import { slugify } from '../lib/slug'
 import { useTheme } from '../lib/theme'
 import ColorSwatch from './ColorSwatch.vue'
 
 const props = defineProps<{
-  paletteId: PaletteId
+  paletteId: string
   group: ColorGroup
   format: ColorFormat
   copyMode: CopyMode

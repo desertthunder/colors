@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import AppFooter from './AppFooter.vue'
 import AppHeader from './AppHeader.vue'
 import { getPalette } from '../lib/colors'
@@ -8,6 +8,7 @@ import AboutView from '../pages/About.vue'
 import PaletteRouteView from '../pages/Palette.vue'
 
 const props = defineProps<{ route: AppRoute }>()
+const generateRequestId = ref(0)
 
 const activePalette = computed(() => {
   if (props.route.page === 'about') return null
@@ -17,11 +18,15 @@ const activePalette = computed(() => {
 
 <template>
   <div class="app-shell">
-    <AppHeader :route="route" />
+    <AppHeader :route="route" @open-generate="generateRequestId += 1" />
 
     <main class="app-main">
       <AboutView v-if="route.page === 'about'" />
-      <PaletteRouteView v-else-if="activePalette" :palette="activePalette" :route="route" />
+      <PaletteRouteView
+        v-else-if="activePalette"
+        :palette="activePalette"
+        :route="route"
+        :generate-request-id="generateRequestId" />
     </main>
 
     <AppFooter />
