@@ -73,6 +73,25 @@ export function getSwatchSheetFilename(
   return `${slug}-swatches.${extension}`
 }
 
+/** Formats a palette object as stable, readable JSON. */
+export function formatPaletteJson(palette: ExportablePalette): string {
+  return `${JSON.stringify(palette, null, 2)}\n`
+}
+
+/** Returns a stable export filename for palette JSON. */
+export function getPaletteJsonFilename(palette: Pick<ExportablePalette, 'id' | 'name'>): string {
+  const slug = slugify(palette.name) || slugify(palette.id) || 'palette'
+  return `${slug}-palette.json`
+}
+
+/** Downloads the palette object as JSON by using a browser Blob URL. */
+export function downloadPaletteJson(palette: ExportablePalette): void {
+  downloadBlob(
+    new Blob([formatPaletteJson(palette)], { type: 'application/json;charset=utf-8' }),
+    getPaletteJsonFilename(palette),
+  )
+}
+
 /** Downloads the generated SVG by using a browser Blob URL. */
 export function downloadSvgSwatchSheet(
   palette: ExportablePalette,

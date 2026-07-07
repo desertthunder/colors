@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { palettes } from '../lib/colors'
+import type { GeneratedPalette } from '../lib/generate'
 import { formatHashRoute, type AppRoute } from '../lib/router'
 
-defineProps<{ route: AppRoute }>()
+defineProps<{ route: AppRoute; generatedPalette?: GeneratedPalette | null; activeGenerated?: boolean }>()
+defineEmits<{ selectGenerated: [] }>()
 </script>
 
 <template>
@@ -19,7 +21,26 @@ defineProps<{ route: AppRoute }>()
         <span>{{ palette.name }}</span>
         <small>{{ palette.groups.length }} groups</small>
       </a>
-      <a class="source-link" :href="palette.sourceUrl" target="_blank" rel="noreferrer">Source</a>
+      <span class="palette-actions">
+        <a class="palette-action" :href="palette.sourceUrl" target="_blank" rel="noreferrer">Source</a>
+        <a
+          class="palette-action"
+          :href="formatHashRoute({ ...route, page: palette.id, search: '', swatch: null, download: 'json' })">
+          JSON
+        </a>
+      </span>
+    </article>
+
+    <article v-if="generatedPalette" class="palette-card" :data-active="activeGenerated ? '' : undefined">
+      <button
+        type="button"
+        class="palette-link generated-tab"
+        :aria-current="activeGenerated ? 'page' : undefined"
+        @click="$emit('selectGenerated')">
+        <span>Generated</span>
+        <small>{{ generatedPalette.groups.length }} groups</small>
+      </button>
+      <button type="button" class="palette-action generated-source" @click="$emit('selectGenerated')">Open</button>
     </article>
   </nav>
 </template>
@@ -27,7 +48,7 @@ defineProps<{ route: AppRoute }>()
 <style scoped>
 .palette-tabs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
   gap: var(--space-2);
 }
 
@@ -45,9 +66,15 @@ defineProps<{ route: AppRoute }>()
 .palette-link {
   display: grid;
   gap: var(--space-1);
+  inline-size: 100%;
+  border: 0;
   text-decoration: none;
   border-bottom: 2px dotted var(--color-text-muted);
   padding: var(--space-3);
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: start;
 }
 
 .palette-link span {
@@ -59,20 +86,32 @@ defineProps<{ route: AppRoute }>()
 }
 
 .palette-link small,
-.source-link {
+.palette-action {
   font-size: var(--size-sm);
   line-height: var(--line-sm);
 }
 
-.source-link {
-  justify-self: start;
+.palette-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.palette-action {
   text-align: center;
   color: var(--color-text-muted);
   font-weight: 700;
   text-underline-offset: 0.2em;
-  width: 100%;
+  inline-size: 100%;
+  border: 0;
   padding-inline: var(--space-2);
   padding-bottom: var(--space-3);
+  background: transparent;
+  font: inherit;
+}
+
+.generated-tab,
+.generated-source {
+  cursor: pointer;
 }
 
 .palette-card:hover,
@@ -86,14 +125,14 @@ defineProps<{ route: AppRoute }>()
 .palette-card:hover .palette-link span,
 .palette-card:focus-within .palette-link span,
 .palette-card[data-active] .palette-link span,
-.source-link:hover,
-.source-link:focus-visible {
+.palette-action:hover,
+.palette-action:focus-visible {
   color: var(--color-accent-strong);
 }
 
 @media (max-width: 48rem) {
   .palette-tabs {
-    grid-template-columns: repeat(3, minmax(11rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
     overflow-x: auto;
     padding-block-end: var(--space-1);
     scrollbar-width: thin;

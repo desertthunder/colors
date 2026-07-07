@@ -1,5 +1,13 @@
 # TODO
 
+## Palette Layout and Generator Integration
+
+- [x] Add progressive palette density modes: overview ramps by default, detailed swatch grids on demand.
+- [ ] Add a compact sticky generated-state action bar with recipe summary, edit, export, and reset actions.
+- [ ] Add swatch-level generator actions such as use as seed, blend from this, and blend to this.
+- [ ] Consider a desktop side inspector for generator/export controls while keeping the drawer behavior on mobile.
+- [ ] Add inline compare rows that place original and generated ramps together before expanding into full swatches.
+
 ## Algorithmic Palettes and Swatch Exports
 
 - [x] Create `src/lib/generate.ts` with typed palette recipes for tone scales, blend
@@ -117,10 +125,10 @@
 
 ---
 
-- [ ] create `src/lib/colors/webawesome.ts` following the `tw.ts` pattern
-- [ ] add the id to `PaletteId` in `types.ts`
-- [ ] import + register in `colors.ts`
-- [ ] add the page to `appPages` in `router.ts`
+- [x] create `src/lib/colors/webawesome.ts` following the `tw.ts` pattern
+- [x] add the id to `PaletteId` in `types.ts`
+- [x] import + register in `colors.ts`
+- [x] add the page to `appPages` in `router.ts`
 
 ### USWDS (U.S. Web Design System)
 
@@ -149,6 +157,6 @@
 
 - [ ] Consider a script under `scripts/` to automate extraction since there are
       ~24 files to process.
-- [ ] same pattern as WebAwesome — fetch each `_*.scss` file via the raw GitHub URL
-- [ ] extract hex values from the SCSS variables
-- [ ] build the palette object.
+- [x] same pattern as WebAwesome — fetch each `_*.scss` file via the raw GitHub URL
+- [x] extract hex values from the SCSS variables
+- [x] build the palette object.

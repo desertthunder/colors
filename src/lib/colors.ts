@@ -2,12 +2,14 @@ import { reasonablePalette as reasonable } from './colors/reasonable'
 import { tailwindPalette as tw } from './colors/tw'
 import type { Palette, PaletteId } from './colors/types'
 import { uchuPalette as uchu } from './colors/uchu'
+import { uswdsPalette as uswds } from './colors/uswds'
+import { webawesomePalette as webawesome } from './colors/webawesome'
 
 /** Shared color data types used by palette UI and formatting helpers. */
 export type { ColorGroup, ColorSpace, ColorSwatch, ColorValue, Palette, PaletteId } from './colors/types'
 
 /** All palettes in the order they should appear in the UI. */
-export const palettes = [tw, uchu, reasonable] satisfies Palette[]
+export const palettes = [tw, uchu, reasonable, webawesome, uswds] satisfies Palette[]
 
 /** Palette lookup table keyed by stable palette id. */
 export const paletteById = Object.fromEntries(

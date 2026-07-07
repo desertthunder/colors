@@ -160,7 +160,7 @@ const bodyBackground = computed(() => {
 }
 
 .group-chevron {
-  justify-self: end;
+  justify-self: center;
   inline-size: 0.5rem;
   block-size: 0.5rem;
   border-inline-end: 2px solid currentColor;
@@ -176,7 +176,7 @@ const bodyBackground = computed(() => {
 
 .swatch-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(8.5rem, calc((100% - 5 * var(--space-2)) / 6))), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 5.75rem), 1fr));
   gap: var(--space-2);
   padding: var(--space-2);
   background: var(--group-body-background);

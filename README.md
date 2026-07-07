@@ -1,4 +1,5 @@
 <!-- markdownlint-disable MD041 -->
+
 ![colors banner](./.github/assets/banner.png)
 
 ![MIT License](https://img.shields.io/badge/License-MIT-orange)

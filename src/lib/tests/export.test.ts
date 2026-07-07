@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
+  formatPaletteJson,
   formatCssVariableGroup,
   formatCssVariables,
   formatSvgSwatchSheet,
+  getPaletteJsonFilename,
   getSwatchSheetFilename,
   type ExportablePalette,
 } from '../export'
@@ -72,5 +74,20 @@ describe('formatSvgSwatchSheet', () => {
     expect(getSwatchSheetFilename({ id: 'generated-fallback', name: '   ' }, 'png')).toBe(
       'generated-fallback-swatches.png',
     )
+  })
+})
+
+describe('formatPaletteJson', () => {
+  it('formats palette objects as deterministic readable JSON', () => {
+    const parsed = JSON.parse(formatPaletteJson(testPalette))
+
+    expect(parsed).toEqual(testPalette)
+    expect(formatPaletteJson(testPalette)).toContain('\n  "groups": [')
+    expect(formatPaletteJson(testPalette).endsWith('\n')).toBe(true)
+  })
+
+  it('returns stable JSON filenames', () => {
+    expect(getPaletteJsonFilename(testPalette)).toBe('generated-brand-friends-palette.json')
+    expect(getPaletteJsonFilename({ id: 'fallback-json', name: '   ' })).toBe('fallback-json-palette.json')
   })
 })

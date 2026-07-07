@@ -5,13 +5,29 @@ import { isColorFormat } from './color'
 /** Hash-routed pages supported by the app. */
 export type AppPage = PaletteId | 'about'
 
+/** Hash-routed download actions supported by the app. */
+export type DownloadAction = 'json'
+
 /** Parsed route state derived from the URL hash. */
-export type AppRoute = { page: AppPage; format: ColorFormat; search: string; swatch: string | null }
+export type AppRoute = {
+  page: AppPage
+  format: ColorFormat
+  search: string
+  swatch: string | null
+  download: DownloadAction | null
+}
 
 /** Route used when the current hash is empty or invalid. */
-export const defaultRoute = { page: 'tailwind', format: 'hex', search: '', swatch: null } satisfies AppRoute
+export const defaultRoute = {
+  page: 'tailwind',
+  format: 'hex',
+  search: '',
+  swatch: null,
+  download: null,
+} satisfies AppRoute
 
-const appPages = ['tailwind', 'uchu', 'reasonable', 'about'] satisfies AppPage[]
+const appPages = ['tailwind', 'uchu', 'reasonable', 'webawesome', 'uswds', 'about'] satisfies AppPage[]
+const downloadActions = ['json'] satisfies DownloadAction[]
 
 /** Parses a URL hash into validated app route state. */
 export function parseHashRoute(hash: string): AppRoute {
@@ -22,12 +38,14 @@ export function parseHashRoute(hash: string): AppRoute {
   const format = params.get('format')
   const search = params.get('search') ?? ''
   const swatch = params.get('swatch')
+  const download = params.get('download')
 
   return {
     page: isAppPage(page) ? page : defaultRoute.page,
     format: isColorFormat(format) ? format : defaultRoute.format,
     search,
     swatch: swatch || null,
+    download: isDownloadAction(download) ? download : null,
   }
 }
 
@@ -36,6 +54,7 @@ export function formatHashRoute(route: AppRoute): string {
   const params = new URLSearchParams({ format: route.format })
   if (route.search) params.set('search', route.search)
   if (route.swatch) params.set('swatch', route.swatch)
+  if (route.download) params.set('download', route.download)
   return `#/${route.page}?${params.toString()}`
 }
 
@@ -48,3 +67,5 @@ export function writeHashRoute(route: AppRoute): void {
 }
 
 const isAppPage = (value: string): value is AppPage => appPages.includes(value as AppPage)
+const isDownloadAction = (value: string | null): value is DownloadAction =>
+  downloadActions.includes(value as DownloadAction)

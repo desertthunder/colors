@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
-import type { Palette } from '../lib/colors'
+import type { ColorGroup } from '../lib/colors'
 import { slugify } from '../lib/slug'
 
-const props = defineProps<{ palette: Palette; activeGroupId: string }>()
+type NavigablePalette = { id: string; groups: ColorGroup[] }
+
+const props = defineProps<{ palette: NavigablePalette; activeGroupId: string }>()
 const emit = defineEmits<{ selectGroup: [id: string] }>()
 const navRef = ref<HTMLElement>()
 
-function groupId(palette: Palette, groupName: string): string {
+function groupId(palette: NavigablePalette, groupName: string): string {
   return `${palette.id}-${slugify(groupName)}`
 }
 

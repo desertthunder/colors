@@ -1,5 +1,5 @@
 /** Stable ids for each palette available in the app. */
-export type PaletteId = 'tailwind' | 'uchu' | 'reasonable'
+export type PaletteId = 'tailwind' | 'uchu' | 'reasonable' | 'webawesome' | 'uswds'
 
 /** Canonical color spaces stored in palette data. */
 export type ColorSpace = 'hex' | 'keyword' | 'oklch'

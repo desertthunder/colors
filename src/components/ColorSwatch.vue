@@ -9,6 +9,7 @@ import type { ColorSwatch } from '../lib/colors'
 const props = defineProps<{ swatch: ColorSwatch; format: ColorFormat; copyMode: CopyMode }>()
 
 const copied = ref(false)
+const displayName = computed(() => props.swatch.name.split('-').at(-1) ?? props.swatch.name)
 const displayedValue = computed(() => formatColorValue(props.swatch.value, props.format))
 const copiedValue = computed(() => formatCopyValue(props.swatch, props.format, props.copyMode))
 const swatchStyle = computed(() => ({ '--swatch-color': props.swatch.value.value }))
@@ -25,9 +26,9 @@ async function copySwatch(): Promise<void> {
 <template>
   <button type="button" class="color-swatch" :data-swatch="swatch.name" :style="swatchStyle" @click="copySwatch">
     <span class="swatch-meta">
-      <span class="swatch-name">{{ swatch.name }}</span>
+      <span class="swatch-name">{{ displayName }}</span>
       <code>{{ displayedValue }}</code>
-      <span class="copy-state" aria-live="polite">{{ copied ? 'Copied' : copyMode }}</span>
+      <span v-if="copied" class="copy-state" aria-live="polite">Copied</span>
     </span>
     <span class="sample" aria-hidden="true"></span>
   </button>
@@ -36,8 +37,8 @@ async function copySwatch(): Promise<void> {
 <style scoped>
 .color-swatch {
   display: grid;
-  gap: var(--space-2);
-  min-block-size: 4.5rem;
+  gap: var(--space-1);
+  min-block-size: 3.5rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--space-2);
@@ -59,7 +60,7 @@ async function copySwatch(): Promise<void> {
 }
 
 .sample {
-  block-size: 1.75rem;
+  block-size: 1.15rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--swatch-color);

@@ -295,28 +295,28 @@ mapping, store a hand-adapted sample with clear attribution and an `approximatio
 Tinted-theming YAML:
 
 ```yaml
-system: "base16"
-name: "Scheme Name"
-slug: "scheme-name"
-author: "Author"
-variant: "dark"
+system: 'base16'
+name: 'Scheme Name'
+slug: 'scheme-name'
+author: 'Author'
+variant: 'dark'
 palette:
-  base00: "#000000"
-  base01: "#111111"
-  base02: "#222222"
-  base03: "#333333"
-  base04: "#444444"
-  base05: "#555555"
-  base06: "#666666"
-  base07: "#777777"
-  base08: "#888888"
-  base09: "#999999"
-  base0A: "#aaaaaa"
-  base0B: "#bbbbbb"
-  base0C: "#cccccc"
-  base0D: "#dddddd"
-  base0E: "#eeeeee"
-  base0F: "#ffffff"
+  base00: '#000000'
+  base01: '#111111'
+  base02: '#222222'
+  base03: '#333333'
+  base04: '#444444'
+  base05: '#555555'
+  base06: '#666666'
+  base07: '#777777'
+  base08: '#888888'
+  base09: '#999999'
+  base0A: '#aaaaaa'
+  base0B: '#bbbbbb'
+  base0C: '#cccccc'
+  base0D: '#dddddd'
+  base0E: '#eeeeee'
+  base0F: '#ffffff'
 ```
 
 CSS variables:
