@@ -8,14 +8,14 @@
       difference checks, and contrast checks.
 - [x] Add deterministic tests for generated step counts, endpoint preservation, token
       naming, and invalid recipe handling.
-- [ ] Add `src/lib/export.ts` helpers for complete-palette and group-level CSS custom
+- [x] Add `src/lib/export.ts` helpers for complete-palette and group-level CSS custom
       property output.
-- [ ] Add tests for CSS variable formatting across `hex`, `rgb`, `hsl`, and `oklch`.
-- [ ] Add an SVG swatch sheet generator that escapes labels, uses deterministic
+- [x] Add tests for CSS variable formatting across `hex`, `rgb`, `hsl`, and `oklch`.
+- [x] Add an SVG swatch sheet generator that escapes labels, uses deterministic
       dimensions, and includes token/value text.
-- [ ] Add tests for SVG output structure, escaped text, generated dimensions, and stable
+- [x] Add tests for SVG output structure, escaped text, generated dimensions, and stable
       filenames.
-- [ ] Add browser-only PNG export by rendering the generated SVG into a `canvas` and
+- [x] Add browser-only PNG export by rendering the generated SVG into a `canvas` and
       downloading with `toBlob`.
 - [ ] Add a compact Generate/Export panel to the palette toolbar without crowding the
       existing format and copy controls.
