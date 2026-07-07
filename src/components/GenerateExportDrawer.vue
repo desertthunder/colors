@@ -8,8 +8,9 @@ import {
   formatCssVariableGroup,
   formatCssVariables,
 } from '../lib/export'
-import { generatePalette, getGenerateableSwatches, type GeneratedPalette, type PaletteRecipe } from '../lib/generate'
-import { getGeneratedWarnings } from '../lib/generate/warnings'
+import { generatePalette, getGenerateableSwatches } from '../lib/generate'
+import type { GeneratedPalette, HarmonyKind, PaletteRecipe } from '../lib/generate'
+import { Warning } from '../lib/generate/warnings'
 import AppDialog from './AppDialog.vue'
 
 const props = defineProps<{
@@ -26,6 +27,7 @@ const seedToken = ref('')
 const fromToken = ref('')
 const toToken = ref('')
 const groupName = ref('')
+const harmony = ref<HarmonyKind>('complementary')
 const steps = ref(6)
 const lightnessCurve = ref<'linear' | 'tailwind-like'>('tailwind-like')
 const error = ref('')
@@ -39,7 +41,7 @@ const groups = computed(() =>
     (group) => group.swatches.filter((swatch) => swatch.value.space !== 'keyword').length >= 2,
   ),
 )
-const warnings = computed(() => (props.generatedPalette ? getGeneratedWarnings(props.generatedPalette) : []))
+const warnings = computed(() => (props.generatedPalette ? Warning.forPalette(props.generatedPalette) : []))
 const hasGeneratedPalette = computed(() => Boolean(props.generatedPalette))
 const generatedSwatches = computed(() => props.generatedPalette?.groups.flatMap((group) => group.swatches) ?? [])
 const previewSwatches = computed(() => generatedSwatches.value.slice(0, 12))
@@ -60,6 +62,7 @@ function resetDefaults(): void {
   fromToken.value = firstSwatch?.token ?? ''
   toToken.value = secondSwatch?.token ?? ''
   groupName.value = groups.value[0]?.name ?? ''
+  harmony.value = 'complementary'
   steps.value = 6
   lightnessCurve.value = 'tailwind-like'
   error.value = ''
@@ -73,6 +76,16 @@ function currentRecipe(): PaletteRecipe {
 
   if (mode.value === 'blend-ramp') {
     return { mode: 'blend-ramp', fromToken: fromToken.value, toToken: toToken.value, steps: steps.value }
+  }
+
+  if (mode.value === 'harmony') {
+    return {
+      mode: 'harmony',
+      seedToken: seedToken.value,
+      harmony: harmony.value,
+      steps: steps.value,
+      lightnessCurve: lightnessCurve.value,
+    }
   }
 
   return { mode: 'group-smoothing', groupName: groupName.value, steps: steps.value }
@@ -134,17 +147,29 @@ async function copyText(value: string, target: string): Promise<void> {
             <span>Mode</span>
             <select v-model="mode">
               <option value="tone-scale">Tone scale</option>
+              <option value="harmony">Harmony</option>
               <option value="blend-ramp">Blend ramp</option>
               <option value="group-smoothing">Group smoothing</option>
             </select>
           </label>
 
-          <label v-if="mode === 'tone-scale'">
+          <label v-if="mode === 'tone-scale' || mode === 'harmony'">
             <span>Seed</span>
             <select v-model="seedToken">
               <option v-for="swatch in swatches" :key="swatch.token" :value="swatch.token">
                 {{ swatch.name }}
               </option>
+            </select>
+          </label>
+
+          <label v-if="mode === 'harmony'">
+            <span>Formula</span>
+            <select v-model="harmony">
+              <option value="complementary">Complementary</option>
+              <option value="analogous">Analogous</option>
+              <option value="triadic">Triadic</option>
+              <option value="tetradic">Tetradic</option>
+              <option value="split-complementary">Split complementary</option>
             </select>
           </label>
 
@@ -177,7 +202,7 @@ async function copyText(value: string, target: string): Promise<void> {
             </select>
           </label>
 
-          <label v-if="mode === 'tone-scale'">
+          <label v-if="mode === 'tone-scale' || mode === 'harmony'">
             <span>Curve</span>
             <select v-model="lightnessCurve">
               <option value="tailwind-like">Tailwind-like</option>
@@ -225,7 +250,7 @@ async function copyText(value: string, target: string): Promise<void> {
 
       <section class="warning-panel">
         <ul v-if="warnings.length" class="warning-list" aria-label="Generated palette warnings">
-          <li v-for="warning in warnings" :key="warning.type">
+          <li v-for="warning in warnings" :key="warning.kind">
             <strong>{{ warning.message }}</strong>
             <span>{{ warning.tokens.join(', ') }}</span>
           </li>

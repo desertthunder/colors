@@ -37,7 +37,7 @@ defineProps<{ route: AppRoute }>()
   min-block-size: 4.5rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-3);
+  /* padding: var(--space-3); */
   color: var(--color-text-muted);
   background: var(--color-surface);
 }
@@ -46,6 +46,8 @@ defineProps<{ route: AppRoute }>()
   display: grid;
   gap: var(--space-1);
   text-decoration: none;
+  border-bottom: 2px dotted var(--color-text-muted);
+  padding: var(--space-3);
 }
 
 .palette-link span {
@@ -64,9 +66,13 @@ defineProps<{ route: AppRoute }>()
 
 .source-link {
   justify-self: start;
+  text-align: center;
   color: var(--color-text-muted);
   font-weight: 700;
   text-underline-offset: 0.2em;
+  width: 100%;
+  padding-inline: var(--space-2);
+  padding-bottom: var(--space-3);
 }
 
 .palette-card:hover,

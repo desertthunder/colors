@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { generatePalette, getGenerateableSwatches } from '../generate'
+import { converter, displayable } from 'culori'
+import { fitOklchToSrgb, generatePalette, getGenerateableSwatches } from '../generate'
 import type { Palette } from '../colors'
+
+const toOklch = converter('oklch')
+const toRgb = converter('rgb')
 
 const testPalette = {
   id: 'tailwind',
@@ -29,10 +33,29 @@ const testPalette = {
         { name: 'cool', token: '--test-cool', value: { space: 'hex', value: '#00ccff' } },
       ],
     },
+    {
+      name: 'High Chroma',
+      swatches: [
+        { name: 'electric', token: '--test-electric', value: { space: 'oklch', value: 'oklch(0.72 0.42 145)' } },
+        { name: 'laser', token: '--test-laser', value: { space: 'oklch', value: 'oklch(0.68 0.38 25)' } },
+      ],
+    },
   ],
 } satisfies Palette
 
 describe('generatePalette', () => {
+  it('fits high-chroma OKLCH colors into sRGB before gamut mapping', () => {
+    const desired = { mode: 'oklch', l: 0.72, c: 0.42, h: 145 }
+    const fitted = fitOklchToSrgb(desired)
+    const fittedOklch = toOklch(fitted.color)
+
+    expect(fitted.adjusted).toBe(true)
+    expect(isDisplayableInSrgb(fitted.color)).toBe(true)
+    expect(fitted.deltaE).toBeLessThan(2)
+    expect(typeof fittedOklch?.c).toBe('number')
+    expect(fittedOklch?.c).toBeLessThan(desired.c)
+  })
+
   it('creates deterministic tone scales with generated token names', () => {
     const generated = generatePalette(testPalette, {
       mode: 'tone-scale',
@@ -90,6 +113,68 @@ describe('generatePalette', () => {
     expect(swatches[2].value.value).toBe('#00ccff')
   })
 
+  it('creates grouped harmony tone scales with stable token names', () => {
+    const generated = generatePalette(testPalette, {
+      mode: 'harmony',
+      seedToken: '--test-blue-500',
+      harmony: 'triadic',
+      steps: 3,
+      lightnessCurve: 'linear',
+    })
+
+    expect(generated.id).toBe('generated-tailwind-harmony-blue-500-triadic')
+    expect(generated.groups.map((group) => group.name)).toEqual([
+      'blue-500 base',
+      'blue-500 triad 1',
+      'blue-500 triad 2',
+    ])
+    expect(generated.groups.map((group) => group.swatches)).toHaveLength(3)
+    expect(generated.groups.every((group) => group.swatches.length === 3)).toBe(true)
+    expect(generated.groups[0].swatches.map((swatch) => swatch.token)).toEqual([
+      '--generated-blue-500-base-1',
+      '--generated-blue-500-base-2',
+      '--generated-blue-500-base-3',
+    ])
+    expect(generated.groups[2].swatches.map((swatch) => swatch.token)).toEqual([
+      '--generated-blue-500-triad-2-1',
+      '--generated-blue-500-triad-2-2',
+      '--generated-blue-500-triad-2-3',
+    ])
+    expect(generated.swatches).toHaveLength(9)
+  })
+
+  it('keeps generated high-chroma tone scales display-safe after fitting', () => {
+    const generated = generatePalette(testPalette, {
+      mode: 'tone-scale',
+      seedToken: '--test-electric',
+      steps: 7,
+      lightnessCurve: 'tailwind-like',
+    })
+
+    expect(generated.groups[0].swatches).toHaveLength(7)
+    expect(generated.swatches.every((swatch) => !swatch.clipped)).toBe(true)
+    expect(generated.swatches.every((swatch) => swatch.deltaE < 2)).toBe(true)
+    expect(generated.groups[0].swatches.every((swatch) => isDisplayableInSrgb(swatch.value.value))).toBe(true)
+  })
+
+  it('dampens rotated harmony chroma so generated harmony groups stay display-safe', () => {
+    const generated = generatePalette(testPalette, {
+      mode: 'harmony',
+      seedToken: '--test-electric',
+      harmony: 'tetradic',
+      steps: 4,
+      lightnessCurve: 'tailwind-like',
+    })
+
+    expect(generated.groups).toHaveLength(4)
+    expect(generated.swatches).toHaveLength(16)
+    expect(generated.swatches.every((swatch) => !swatch.clipped)).toBe(true)
+    expect(generated.swatches.every((swatch) => swatch.deltaE < 2)).toBe(true)
+    expect(
+      generated.groups.flatMap((group) => group.swatches).every((swatch) => isDisplayableInSrgb(swatch.value.value)),
+    ).toBe(true)
+  })
+
   it('returns only parseable swatches as generation inputs', () => {
     expect(getGenerateableSwatches(testPalette).map((swatch) => swatch.token)).toEqual([
       '--test-black',
@@ -98,6 +183,8 @@ describe('generatePalette', () => {
       '--test-blue-900',
       '--test-hot',
       '--test-cool',
+      '--test-electric',
+      '--test-laser',
     ])
   })
 
@@ -123,5 +210,20 @@ describe('generatePalette', () => {
     expect(() => generatePalette(testPalette, { mode: 'group-smoothing', groupName: 'Missing', steps: 3 })).toThrow(
       'Unknown group',
     )
+
+    expect(() =>
+      generatePalette(testPalette, {
+        mode: 'harmony',
+        seedToken: '--test-current',
+        harmony: 'complementary',
+        steps: 3,
+        lightnessCurve: 'linear',
+      }),
+    ).toThrow('Swatch is not parseable')
   })
 })
+
+function isDisplayableInSrgb(color: Parameters<typeof toRgb>[0]): boolean {
+  const rgb = toRgb(color)
+  return Boolean(rgb && displayable(rgb))
+}

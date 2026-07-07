@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { GeneratedPalette } from '../../generate'
-import { getGeneratedWarnings } from '../../generate/warnings'
+import { Warning } from '../../generate/warnings'
 
 const generatedPalette = {
   id: 'generated-test',
@@ -21,17 +21,25 @@ const generatedPalette = {
   ],
 } satisfies GeneratedPalette
 
-describe('getGeneratedWarnings', () => {
+describe('Warning.forPalette', () => {
   it('summarizes low contrast, gamut clipping, and material color changes', () => {
-    expect(getGeneratedWarnings(generatedPalette)).toEqual([
-      { type: 'low-contrast-white', message: 'Low contrast on white below 4.5:1', tokens: ['--risky'] },
-      { type: 'low-contrast-black', message: 'Low contrast on black below 4.5:1', tokens: ['--risky'] },
+    expect(Warning.forPalette(generatedPalette)).toEqual([
+      { type: 'low-contrast', message: 'No black or white text reaches 4.5:1 contrast', tokens: ['--risky'] },
       { type: 'clipped-gamut', message: 'Mapped into sRGB gamut', tokens: ['--risky'] },
       { type: 'mapped-color', message: 'Changed materially during gamut mapping (Delta E >= 2)', tokens: ['--risky'] },
     ])
   })
 
+  it('omits low contrast when either black or white text reaches the target', () => {
+    expect(
+      Warning.forPalette({
+        ...generatedPalette,
+        swatches: [{ ...generatedPalette.swatches[1], clipped: false, deltaE: 0.1, contrastWithBlack: 7 }],
+      }),
+    ).toEqual([])
+  })
+
   it('omits warning categories without affected swatches', () => {
-    expect(getGeneratedWarnings({ ...generatedPalette, swatches: [generatedPalette.swatches[0]] })).toEqual([])
+    expect(Warning.forPalette({ ...generatedPalette, swatches: [generatedPalette.swatches[0]] })).toEqual([])
   })
 })
