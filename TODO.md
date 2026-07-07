@@ -2,11 +2,11 @@
 
 ## Algorithmic Palettes and Swatch Exports
 
-- [ ] Create `src/lib/generate.ts` with typed palette recipes for tone scales, blend
+- [x] Create `src/lib/generate.ts` with typed palette recipes for tone scales, blend
       ramps, and group smoothing.
-- [ ] Reuse `culori` for OKLCH conversion, interpolation, gamut mapping, color
+- [x] Reuse `culori` for OKLCH conversion, interpolation, gamut mapping, color
       difference checks, and contrast checks.
-- [ ] Add deterministic tests for generated step counts, endpoint preservation, token
+- [x] Add deterministic tests for generated step counts, endpoint preservation, token
       naming, and invalid recipe handling.
 - [ ] Add `src/lib/export.ts` helpers for complete-palette and group-level CSS custom
       property output.
